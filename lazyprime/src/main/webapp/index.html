@@ -61,6 +61,13 @@
                         <input ng-click="registrarProveedor()" type="submit" value="Registrar Proveedor">
                     </form>
 
+                    <form class="form-inline" >
+                        <div class="form-group">
+                            <input type="file" id="fileProveedor" name="file"/>
+                            <button ng-click="enviarArchivoProveedor()">Subir archivo</button>
+                        </div>
+                    </form>
+
 
                     <table class="table table-hover">
                         <th>
@@ -94,6 +101,13 @@
                         </select>
                         <br>
                         <input ng-click="registrarProducto()" type="submit" value="Registrar">
+                    </form>
+
+                    <form class="form-inline" >
+                        <div class="form-group">
+                            <input type="file" id="fileProducto" name="file"/>
+                            <button ng-click="enviarArchivoProducto()">Subir archivo</button>
+                        </div>
                     </form>
 
 

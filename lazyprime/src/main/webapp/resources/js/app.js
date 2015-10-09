@@ -146,24 +146,57 @@ var app = angular.module('myApp', ['ngRoute'])
             })
         }
 
+        $scope.enviarArchivoProveedor = function () {
+            $scope.data;
+            var f = document.getElementById('fileProveedor').files[0],
+                r = new FileReader();
+                r.onloadend = function(e){
+                    $scope.data = e.target.result;
+                }
+                r.readAsBinaryString(f);
+                console.log($scope.data);
+
+        }
+
+        $scope.enviarArchivoProducto = function () {
+            $scope.data;
+            var f = document.getElementById('fileProducto').files[0],
+                r = new FileReader();
+            r.onloadend = function(e){
+                $scope.data = e.target.result;
+            }
+            r.readAsBinaryString(f);
+            console.log($scope.data);
+
+        }
 
         //Lista inicial
         $http.get("http://localhost:8080/lazyprime/rest/providers")
             .success(function(response) {
                 $scope.progress = $scope.progress + 30;
                 $scope.providers = response;
+            }).error(function(response){
+                console.log(response);
+                $scope.progress = $scope.progress + 30;
             })
 
-        $http.get("http://localhost:8080/EjbJaxRS-web/rest/products")
+        $http.get("http://localhost:8080/lazyprime/rest/products")
             .success(function(response) {
                 $scope.progress = $scope.progress + 30;
                 $scope.products = response;
+            }).error(function(response){
+                console.log(response);
+                $scope.progress = $scope.progress + 30;
             })
         $http.get("http://localhost:8080/lazyprime/rest/compras")
             .success(function(response) {
                 $scope.progress = $scope.progress + 30;
                 $scope.listaDeCompras = response;
+            }).error(function(response){
+                console.log(response);
+                $scope.progress = $scope.progress + 30;
             })
+
 
 
     })
