@@ -1,0 +1,159 @@
+<!--
+    JBoss, Home of Professional Open Source
+    Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. See the copyright.txt in the
+    distribution for a full listing of individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!-- Plain HTML page that kicks us into the app -->
+
+<html>
+<head>
+    <!--<meta http-equiv="Refresh" content="0; URL=index.jsf"> -->
+    <title>Web 2015</title>
+    <link rel="stylesheet" href="resources/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="resources/css/bootstrap.min.css">
+     <script src="resources/js/angular.js"></script>
+    <script src="resources/js/angular-route.js"></script>
+    <script src="resources/js/app.js"></script>
+    <script src="resources/js/jquery.min.js"></script>
+    <script src="resources/js/bootstrap.min.js"></script>
+
+</head>
+<body ng-app="myApp" ng-controller="elementsController" >
+
+<div id="container">
+    <div id="content"  >
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <ul class="nav nav-tabs nav-justified">
+                    <li role="presentation"><a data-toggle="tab" href="#producto">Productos</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#proveedores">Proveedores</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#compras">Compras</a></li>
+                    <li role="presentation"><a href="#">Ventas</a></li>
+                    <li role="presentation"><a href="#">Facturas</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div  ng-init="progress = 10" ng-hide="progress == 100" class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar"  aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+                <span class="sr-only">Carga de datos {{progress}}% completada</span>
+            </div>
+        </div>
+
+        <div class="tab-content">
+            <div class="row tab-pane fade in active" id="proveedores">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <form>
+                        <h3>Registrar Proveedor</h3>
+                        Nombre del proveedor: <input ng-model="proveedor.name" autofocus>
+                        <input ng-click="registrarProveedor()" type="submit" value="Registrar Proveedor">
+                    </form>
+
+
+                    <table class="table table-hover">
+                        <th>
+                        <td><h3> Lista de proveedores</h3></td>
+                        <td></td>
+                        </th>
+                        <tr ng-repeat="proveedor in providers | orderBy:'id'">
+                            <td>{{ proveedor.id }}</td>
+                            <td>{{ proveedor.name }}</td>
+                            <td>
+                                <input ng-click="eliminarProveedor(proveedor.id)" type="submit" value="Eliminar Proveedor">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row tab-pane fade" id="producto">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form >
+                        <h3>Registrar Producto</h3><br>
+
+                        Nombre del producto: <input ng-model="producto.nameProduct" autofocus><br>
+                        Precio unitario del producto: <input ng-model="producto.precioUnitario"><br>
+                        Cantidad del producto: <input ng-model="producto.cantidad"><br>
+                        Proveedor:
+                        <select  ng-model="producto.product_provider_id">
+                        <option ng-repeat="proveedor in providers"
+                                value="{{proveedor}}">{{proveedor.name}}</option>
+                        </select>
+                        <br>
+                        <input ng-click="registrarProducto()" type="submit" value="Registrar">
+                    </form>
+
+
+                    <h3> Lista de productos</h3>
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                                <td align="center">ID</td>
+                                <td align="center">Producto</td>
+                                <td align="center">Cantidad</td>
+                                <td align="center">Precio</td>
+                                <td align="center">Proveedor</td>
+                                <td align="center">Cantidad</td>
+                                <td align="center">Agregar al carrito</td>
+                        </thead>
+                        <tr ng-repeat="producto in products | orderBy:'id' ">
+                            <td align="center">{{ producto.id }}</td>
+                            <td align="center">{{ producto.nameProduct }}</td>
+                            <td align="center">{{ producto.cantidad }}</td>
+                            <td align="center">{{ producto.precioUnitario | currency:"Gs ":000 }}</td>
+                            <td align="center">{{ producto.product_provider.name }}</td>
+                            <td align="center"><input  ng-init="cantidadSolicitada = 0" ng-model="cantidadSolicitada" type="number" min="0"></td>
+                            <td align="center"><button ng-click="agregarACarritoDeCompra(producto,cantidadSolicitada)" class="glyphicon glyphicon-shopping-cart" ng-hide="cantidadSolicitada == 0" aria-hidden="true"> </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
+
+
+
+            <div class="row tab-pane fade" id="compras">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <h3> Lista de productos a comprar del proveedor</h3>
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <td align="center">ID</td>
+                        <td align="center">Producto</td>
+                        <td align="center">Cantidad</td>
+                        <td align="center">Proveedor</td>
+                        <td align="center">Total</td>
+                        <td align="center">Sacar de la lista</td>
+                        </thead>
+                        <tr ng-repeat="item in listaDeCompras | orderBy:'id' ">
+                            <td align="center">{{item.id}}</td>
+                            <td align="center">{{item.product.nameProduct}}</td>
+                            <td align="center">{{item.cantidad}}</td>
+                            <td align="center">{{item.product.product_provider.name}}</td>
+                            <td align="center">{{ item.cantidad * item.product.precioUnitario}} Gs</td>
+                            <td align="center"><button ng-click="eliminarProductoDeListaDeCompras(item.id)">Quitar</button> </td>
+                        </tr>
+                    </table>
+                    <button ng-hide="listaDeCompras.length">Comprar todo</button>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
