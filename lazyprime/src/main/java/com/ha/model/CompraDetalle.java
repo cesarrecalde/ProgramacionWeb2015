@@ -17,6 +17,7 @@
 package com.ha.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
@@ -32,6 +33,7 @@ public class CompraDetalle implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Min(1)
     private int cantidad;
 
     @ManyToOne

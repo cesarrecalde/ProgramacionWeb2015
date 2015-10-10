@@ -161,7 +161,7 @@
                             <td align="center"><button ng-click="eliminarProductoDeListaDeCompras(item.id)">Quitar</button> </td>
                         </tr>
                     </table>
-                    <button ng-hide="listaDeCompras.length">Comprar todo</button>
+                    <button ng-show="listaDeCompras.length > 0">Comprar todo</button>
                 </div>
                 <div class="col-md-2"></div>
             </div>

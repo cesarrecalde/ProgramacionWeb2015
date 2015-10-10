@@ -40,8 +40,6 @@ public class Provider implements Serializable {
     @Size(min = 1, max = 25)
     private String name;
 
-    @ManyToOne
-    private Compra provider_compra;
 
     public long getId() {
         return id;
@@ -61,12 +59,6 @@ public class Provider implements Serializable {
 
     public Provider(String name) {
         this.name = name;
-    }
-
-
-    public Provider(String name, Compra provider_compra) {
-        this.name = name;
-        this.provider_compra = provider_compra;
     }
 
      public Provider() {

@@ -41,7 +41,7 @@ public class Compra implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    @OneToMany(mappedBy = "compra_detalle",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "compra_detalle")
     private List<CompraDetalle> compraDetalles;
 
     public List<CompraDetalle> getCompraDetalles() {
@@ -67,6 +67,8 @@ public class Compra implements Serializable {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
+
+
 
 
     public Compra() {
@@ -108,6 +110,8 @@ public class Compra implements Serializable {
 
         return proveedor;
     }
+
+
 
     public Compra(long cantidadSolicitada) {
         this.cantidadSolicitada = cantidadSolicitada;
