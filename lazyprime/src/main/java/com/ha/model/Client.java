@@ -22,6 +22,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @XmlRootElement
@@ -32,19 +33,21 @@ public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @NotNull
     @Size(min = 1, max = 25)
-    @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String name;
 
+    @OneToMany(mappedBy = "client")
+    private List<Venta> venta;
 
-    public Long getId() {
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -56,4 +59,6 @@ public class Client implements Serializable {
         this.name = name;
     }
 
+    public Client() {
+    }
 }

@@ -1,14 +1,6 @@
 var app = angular.module('myApp', ['ngRoute'])
 
-    .config(function($routeProvider) {
-        $routeProvider
-            .when('/', {
-                templateUrl: 'tableContent.html'
-            })
-            .otherwise({
-                redirectTo: '/'
-            });
-    })
+
 
     .config(['$httpProvider', function($httpProvider) {
         $httpProvider.defaults.useXDomain = true;
@@ -25,27 +17,6 @@ var app = angular.module('myApp', ['ngRoute'])
         $scope.tables = [];
         $scope.options = [];
         $scope.pagination = [];
-
-        //Select for Order ascend or descendt
-        $scope.options.dataOrderAscOrDesc = {
-            availableOptions: [
-                {id: '1', value: 'asc', name: 'Ordenamiento Ascendente'},
-                {id: '2', value: 'desc', name: 'Ordenamiento Descendente'}
-            ],
-            selectedOptionOrden: {id: '1', name: 'Ordenamiento Ascendente'}
-        };
-
-        //Select for order by
-        $scope.options.dataOrderBy = {
-            availableOptions: [
-                {id: '1', value: 'fecha', name: 'Ordenar por Fecha'},
-                {id: '2', value: 'monto_total', name: 'Ordenar por Monto'},
-                {id: '3', value: 'numero', name: 'Ordenar por Numero'},
-                {id: '4', value: 'ruc_cliente', name: 'Ordenar por Ruc'},
-                {id: '5', value: 'nombre_cliente', name: 'Ordenar por Cliente'}
-            ],
-            selectedOption: {id: '1',name: 'Ordenar por Fecha'}
-        };
 
 
         $scope.request = function(caseRequest){
@@ -69,22 +40,44 @@ var app = angular.module('myApp', ['ngRoute'])
                         })
                     $http.get("http://localhost:8080/lazyprime/rest/comprasDetalles")
                         .success(function(response) {
-                            $scope.progress = $scope.progress + 20;
-                            $scope.listaDePedido = response;
+                            $scope.progress = $scope.progress + 10;
+                            $scope.listaDePedidoCompra = response;
                         }).error(function(response){
-                            $scope.progress = $scope.progress + 20;
+                            $scope.progress = $scope.progress + 10;
                         })
                     $http.get("http://localhost:8080/lazyprime/rest/compras")
                         .success(function(response) {
-                            $scope.progress = $scope.progress + 40;
+                            $scope.progress = $scope.progress + 10;
                             $scope.listaDeCompras = response;
                         }).error(function(response){
-                            $scope.progress = $scope.progress + 40;
+                            $scope.progress = $scope.progress + 10;
                         })
+                    $http.get("http://localhost:8080/lazyprime/rest/clients")
+                        .success(function(response) {
+                            $scope.progress = $scope.progress + 20;
+                            $scope.listaDeClientes = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 20;
+                        })
+                    $http.get("http://localhost:8080/lazyprime/rest/ventas")
+                        .success(function(response) {
+                            $scope.progress = $scope.progress + 10;
+                            $scope.listaDeVentas = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 10;
+                        })
+                    $http.get("http://localhost:8080/lazyprime/rest/ventasDetalles")
+                        .success(function(response) {
+                            $scope.progress = $scope.progress + 10;
+                            $scope.listaDePedidoVenta = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 10;
+                        })
+
                     break;
             }
-
         }
+
 
         //Funciones para la paginacion remota
         $scope.pagination.main = {
@@ -106,10 +99,8 @@ var app = angular.module('myApp', ['ngRoute'])
             }
         };
 
-        //Funcion para desplegar mensaje al seleccionar una tupla
-        $scope.show = function($producto){
-            alert("Elemento seleccionado\nNumero: "+$producto.numero+"\nMonto total: "+$producto.monto_total+"\nNombre del cliente: "+$producto.nombre_cliente+"\nRuc del cliente: "+$producto.ruc_cliente+"\nFecha: "+$producto.fecha   );
-        };
+
+        // Funciones de registro
 
         $scope.registrarProveedor = function () {
 
@@ -120,12 +111,38 @@ var app = angular.module('myApp', ['ngRoute'])
                 data: {name: $scope.proveedor.name}
             }).success(function() {
                 $scope.request('loadPage');
+                $scope.proveedor.name = '';
+            })
+        }
+
+        $scope.registrarCliente = function () {
+
+            $http({
+                url: 'http://localhost:8080/lazyprime/rest/clients',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                data: {name: $scope.cliente.name}
+            }).success(function() {
+                $scope.request('loadPage');
+                $scope.cliente.name = '';
+
             })
         }
 
         $scope.agregarACarritoDeCompra = function(producto,cantidadSolicitada){
             $http({
                 url: 'http://localhost:8080/lazyprime/rest/comprasDetalles',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                data: {product:producto , cantidad:cantidadSolicitada}
+            }).success(function() {
+                $scope.request('loadPage');
+            })
+        }
+
+        $scope.agregarACarritoDeVenta = function(producto,cantidadSolicitada){
+            $http({
+                url: 'http://localhost:8080/lazyprime/rest/ventasDetalles',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 data: {product:producto , cantidad:cantidadSolicitada}
@@ -149,9 +166,59 @@ var app = angular.module('myApp', ['ngRoute'])
             })
         }
 
+        $scope.enviarArchivoProducto = function () {
+            $scope.data;
+            var f = document.getElementById('fileProducto').files[0],
+                r = new FileReader();
+            r.onloadend = function(e){
+                $scope.data = e.target.result;
+            }
+            r.readAsBinaryString(f);
+        }
+
+        $scope.comprarProducto = function (producto) {
+            console.log(producto);
+        }
+
+        $scope.compraPedido = function(listaDePedidos){
+            $http({
+                url: 'http://localhost:8080/lazyprime/rest/compras',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                data: {compraDetalles:listaDePedidos}
+            }).success(function(response) {
+                $scope.request('loadPage');
+            }).error(function (response) {
+                alert(response.error);
+            })
+        }
+
+        $scope.ventaPedido = function(listaDePedidos){
+            $http({
+                url: 'http://localhost:8080/lazyprime/rest/ventas',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                data: {ventaDetalles:listaDePedidos}
+            }).success(function(response) {
+                $scope.request('loadPage');
+            }).error(function (response) {
+                alert(response.error);
+            })
+        }
+
+
+
+
+        // Funciones de eliminacion
 
         $scope.eliminarProductoDeListaDeCompras = function (id) {
             $http.delete("http://localhost:8080/lazyprime/rest/comprasDetalles/" + id).success(function() {
+                $scope.request('loadPage');
+            })
+        }
+
+        $scope.eliminarProductoDeListaDeVentas = function (id) {
+            $http.delete("http://localhost:8080/lazyprime/rest/ventasDetalles/" + id).success(function() {
                 $scope.request('loadPage');
             })
         }
@@ -174,34 +241,15 @@ var app = angular.module('myApp', ['ngRoute'])
 
         }
 
-        $scope.enviarArchivoProducto = function () {
-            $scope.data;
-            var f = document.getElementById('fileProducto').files[0],
-                r = new FileReader();
-            r.onloadend = function(e){
-                $scope.data = e.target.result;
-            }
-            r.readAsBinaryString(f);
-        }
 
-        $scope.comprarProducto = function (producto) {
-            console.log(producto);
-        }
 
-        $scope.comprarPedido = function(listaDePedidos){
-            $http({
-                url: 'http://localhost:8080/lazyprime/rest/compras',
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                data: {compraDetalles:listaDePedidos}
-            }).success(function(response) {
-                $scope.request('loadPage');
-            }).error(function (response) {
-                alert(response.error);
-            })
-        }
+
+        //Funciones de listado
 
         //Lista inicial
         $scope.request('loadPage');
+
+
+
 
     })

@@ -16,37 +16,33 @@
  */
 package com.ha.data;
 
-import com.ha.model.CompraDetalle;
+import com.ha.model.Compra;
+import com.ha.model.Venta;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
-@RequestScoped
-public class CompraDetalleListProducer {
+@ApplicationScoped
+public class VentaRepository {
 
     @Inject
-    private CompraDetalleRepository compraDetalleRepository;
+    private EntityManager em;
 
-    private List<CompraDetalle> compraDetalles;
-
-    @Produces
-    @Named
-    public List<CompraDetalle> getCompraDetalles() {
-        return compraDetalles;
+    public Venta findById(Long id) {
+        return em.find(Venta.class, id);
     }
 
-    public void onCompraDetallesListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final CompraDetalle compraDetalle) {
-        retrieveAllCompraDetalleOrderedById();
-    }
 
-    @PostConstruct
-    public void retrieveAllCompraDetalleOrderedById() {
-        compraDetalles = compraDetalleRepository.findAllOrderedById();
+    public List<Venta> findAllOrderedByDate() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Venta> criteria = cb.createQuery(Venta.class);
+        Root<Venta> ventaRoot = criteria.from(Venta.class);
+        criteria.select(ventaRoot).orderBy(cb.asc(ventaRoot.get("fecha")));
+        return em.createQuery(criteria).getResultList();
     }
 }

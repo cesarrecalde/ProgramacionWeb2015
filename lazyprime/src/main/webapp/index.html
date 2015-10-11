@@ -29,18 +29,45 @@
     <script src="resources/js/bootstrap.min.js"></script>
 
 </head>
+
 <body ng-app="myApp" ng-controller="elementsController" >
 
 <div id="container">
     <div id="content"  >
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
-                <ul class="nav nav-tabs nav-justified">
-                    <li role="presentation"><a data-toggle="tab" href="#proveedores">Proveedores</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#producto">Productos</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#pedidos">Pedidos</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#compras">Compras Realizadas</a></li>
-                    <li role="presentation"><a href="#">Ventas</a></li>
+                <ul class="nav nav-tabs">
+                     <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Proveedores<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-toggle="tab" href="#proveedores">Registro de proveedor</a></li>
+                            <li><a data-toggle="tab" href="#lista_proveedores">Lista de proveedores</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Clientes <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-toggle="tab" href="#clientes">Registro de clientes</a></li>
+                            <li><a data-toggle="tab" href="#lista_clientes">Listado de clientes</a></li>
+                        </ul>
+                    </li>
+                     <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Productos <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-toggle="tab" href="#producto">Registrar Producto</a></li>
+                            <li><a data-toggle="tab" href="#lista_productos">Lista de Productos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Carrito de productos <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-toggle="tab" href="#pedidos_compra">Pedidos de compra</a></li>
+                            <li><a data-toggle="tab" href="#pedidos_ventas">Pedido de venta</a></li>
+                        </ul>
+                    </li>
+
+                     <li role="presentation"><a data-toggle="tab" href="#compras">Compras Realizadas</a></li>
+                     <li role="presentation"><a data-toggle="tab" href="#ventas">Ventas Realizadas</a></li>
                     <li role="presentation"><a href="#">Facturas</a></li>
                 </ul>
             </div>
@@ -51,6 +78,7 @@
                 <span class="sr-only">Carga de datos {{progress}}% completada</span>
             </div>
         </div>
+
 
 
         <div class="tab-content">
@@ -69,8 +97,13 @@
                             <button ng-click="enviarArchivoProveedor()">Subir archivo</button>
                         </div>
                     </form>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
 
-
+            <div class="row tab-pane fade" id="lista_proveedores">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
                     <table class="table table-hover">
                         <th>
                         <td><h3> Lista de proveedores</h3></td>
@@ -85,7 +118,50 @@
                         </tr>
                     </table>
                 </div>
+                <div class="col-md-3"></div>
             </div>
+
+
+
+
+                <div class="row tab-pane fade" id="clientes">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <form>
+                            <h3>Registrar cliente</h3>
+                            Nombre del cliente: <input ng-model="cliente.name" autofocus>
+                            <input ng-click="registrarCliente()" type="submit" value="Registrar Cliente">
+                        </form>
+
+
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+                <div class="row tab-pane fade" id="lista_clientes">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <table class="table table-hover">
+                            <th>
+                            <td><h3> Lista de clientes</h3></td>
+                            <td></td>
+                            </th>
+                            <tr ng-repeat="cliente in listaDeClientes | orderBy:'id'">
+                                <td>{{ cliente.id }}</td>
+                                <td>{{ cliente.name }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+
+
+
+
+
+
+
+
 
             <div class="row tab-pane fade" id="producto">
                 <div class="col-md-2"></div>
@@ -111,8 +187,14 @@
                             <button ng-click="enviarArchivoProducto()">Subir archivo</button>
                         </div>
                     </form>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
 
 
+            <div class="row tab-pane fade" id="lista_productos">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
                     <h3> Lista de productos</h3>
                     <table class="table table-hover table-bordered">
                         <thead>
@@ -122,7 +204,8 @@
                         <td align="center">Precio</td>
                         <td align="center">Proveedor</td>
                         <td align="center">Cantidad</td>
-                        <td align="center">Agregar al carrito</td>
+                        <td align="center">Agregar al carrito de compras</td>
+                        <td align="center">Agregar al carrito de ventas</td>
                         </thead>
                         <tr ng-repeat="producto in products | orderBy:'id' ">
                             <td align="center">{{ producto.id }}</td>
@@ -132,6 +215,7 @@
                             <td align="center">{{ producto.product_provider.name }}</td>
                             <td align="center"><input  ng-init="cantidadSolicitada = 0" ng-model="cantidadSolicitada" type="number" min="0"></td>
                             <td align="center"><button ng-click="agregarACarritoDeCompra(producto,cantidadSolicitada)" class="glyphicon glyphicon-shopping-cart" ng-hide="cantidadSolicitada == 0" aria-hidden="true"> </td>
+                            <td align="center"><button ng-click="agregarACarritoDeVenta(producto,cantidadSolicitada)" class="glyphicon glyphicon-usd" ng-hide="cantidadSolicitada == 0" aria-hidden="true"> </td>
                         </tr>
                     </table>
                 </div>
@@ -139,9 +223,7 @@
             </div>
 
 
-
-
-            <div class="row tab-pane fade" id="pedidos">
+            <div class="row tab-pane fade" id="pedidos_compra">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
                     <h3>Pedidos para comprar</h3>
@@ -157,7 +239,7 @@
                         <td align="center">Total</td>
                         <td align="center">Opcion</td>
                         </thead>
-                        <tr ng-repeat="item in listaDePedido | orderBy:'id' ">
+                        <tr ng-repeat="item in listaDePedidoCompra | orderBy:'id' ">
                             <td align="center">{{item.id}}</td>
                             <td align="center">{{item.product.nameProduct}}</td>
                             <td align="center">{{item.cantidad}}</td>
@@ -168,7 +250,41 @@
                             </td>
                         </tr>
                     </table>
-                    <button ng-click="comprarPedido(listaDePedido)" ng-show="listaDePedido.length > 0">Comprar todo</button>
+                    <button ng-click="compraPedido(listaDePedidoCompra)" ng-show="listaDePedidoCompra.length > 0">Comprar todo</button>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
+
+
+            <div class="row tab-pane fade" id="pedidos_ventas">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <h3>Pedidos para venta</h3>
+
+
+
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <td align="center">ID</td>
+                        <td align="center">Producto</td>
+                        <td align="center">Cantidad</td>
+                        <td align="center">Proveedor</td>
+                        <td align="center">Total</td>
+                        <td align="center">Opcion</td>
+                        </thead>
+                        <tr ng-repeat="item in listaDePedidoVenta | orderBy:'id' ">
+                            <td align="center">{{item.id}}</td>
+                            <td align="center">{{item.product.nameProduct}}</td>
+                            <td align="center">{{item.cantidad}}</td>
+                            <td align="center">{{item.product.product_provider.name}}</td>
+                            <td align="center">{{ item.cantidad * item.product.precioUnitario}} Gs</td>
+                            <td align="center">
+                                <button ng-click="eliminarProductoDeListaDeVentas(item.id)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <button ng-click="ventaPedido(listaDePedidoVenta)" ng-show="listaDePedidoVenta.length > 0">Comprar todo</button>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -202,6 +318,34 @@
             </div>
 
 
+
+
+            <div class="row tab-pane fade" id="ventas">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <h3>Ventas realizadas</h3>
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <td align="center">ID</td>
+                        <td align="center">Productos Vendidos</td>
+                        <td align="center">Fecha de compra</td>
+                        </thead>
+                        <tr ng-repeat="item in listaDeVentas | orderBy:'id' ">
+                            <td align="center">{{item.id}}</td>
+                            <td>
+                                <div align="center">
+                                    <select>
+                                        <option ng-repeat="producto in item.ventaDetalles">
+                                            {{producto.product.nameProduct}} - {{producto.cantidad}} Unidades</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td align="center">{{item.fecha}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
 
         </div>
     </div>

@@ -14,39 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ha.data;
+package com.ha.service;
 
-import com.ha.model.Client;
+import com.ha.model.Compra;
+import com.ha.model.Venta;
+import com.ha.model.VentaDetalle;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
-import javax.enterprise.inject.Produces;
+import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
+import javax.persistence.EntityManager;
+import java.util.logging.Logger;
 
-@RequestScoped
-public class ClientListProducer {
+// The @Stateless annotation eliminates the need for manual transaction demarcation
+@Stateless
+public class VentaDetalleRemove {
 
     @Inject
-    private ClientRepository clientRepository;
+    private Logger log;
 
-    private List<Client> clients;
+    @Inject
+    private EntityManager em;
 
-    @Produces
-    @Named
-    public List<Client> getClients() {
-        return clients;
-    }
+    @Inject
+    private Event<VentaDetalle> ventaDetalleEvent;
 
-    public void onClientListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Client client) {
-        retrieveAllClientsOrderedByName();
-    }
 
-    @PostConstruct
-    public void retrieveAllClientsOrderedByName() {
-        clients = clientRepository.findAllOrderedByName();
+    public void remove(long id) throws Exception {
+        VentaDetalle c = em.find(VentaDetalle.class, id);
+        em.remove(c);
+        ventaDetalleEvent.fire(c);
     }
 }

@@ -53,6 +53,9 @@ public class Product implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Provider product_provider;
 
+    @OneToMany(mappedBy = "product")
+    private List<VentaDetalle> ventaDetalles;
+
 
     public long getId() {
         return id;
