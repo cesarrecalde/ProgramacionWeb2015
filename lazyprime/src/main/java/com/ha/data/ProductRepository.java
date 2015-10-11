@@ -42,12 +42,11 @@ public class ProductRepository {
     }
 
 
-    public List<Product> findAllOrderedByName() {
+    public List<Product> findAllOrderedByName(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> criteria = cb.createQuery(Product.class);
         Root<Product> productRoot = criteria.from(Product.class);
         criteria.select(productRoot).orderBy(cb.asc(productRoot.get("nameProduct")));
-        List<Product> list = em.createQuery(criteria).getResultList();
-        return list;
+         return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
     }
 }

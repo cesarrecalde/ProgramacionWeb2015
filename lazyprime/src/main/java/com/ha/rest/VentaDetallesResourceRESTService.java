@@ -16,12 +16,8 @@
  */
 package com.ha.rest;
 
-import com.ha.data.CompraDetalleRepository;
 import com.ha.data.VentaDetalleRepository;
-import com.ha.model.CompraDetalle;
 import com.ha.model.VentaDetalle;
-import com.ha.service.CompraDetalleRegistration;
-import com.ha.service.CompraDetalleRemove;
 import com.ha.service.VentaDetalleRegistration;
 import com.ha.service.VentaDetalleRemove;
 
@@ -61,22 +57,15 @@ public class VentaDetallesResourceRESTService {
     @Inject
     VentaDetalleRegistration registration;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<VentaDetalle> listAllVentaDetalles() {
-        return repository.findAllOrderedById();
-    }
 
     @GET
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public VentaDetalle lookupVentaDetalleById(@PathParam("id") long id) {
-        VentaDetalle ventaDetalle = repository.findById(id);
-        if (ventaDetalle == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return ventaDetalle;
+    public List<VentaDetalle> listAllVentaDetalles(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedById(position);
     }
+
 
     /**
      * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,

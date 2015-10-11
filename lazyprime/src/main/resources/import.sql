@@ -3,6 +3,8 @@ INSERT INTO provider(name) VALUES ('Proveedor 2')
 INSERT INTO provider(name) VALUES ('Proveedor 3')
 INSERT INTO provider(name) VALUES ('Proveedor 4')
 INSERT INTO provider(name) VALUES ('Proveedor 5')
+INSERT INTO provider(name) VALUES ('Proveedor 6')
+INSERT INTO provider(name) VALUES ('Proveedor 7')
 
 INSERT INTO product(cantidad, nameproduct, preciounitario, product_provider_id) VALUES (3,'Producto 1',3000,1);
 INSERT INTO product(cantidad, nameproduct, preciounitario, product_provider_id) VALUES (4,'Producto 2', 12000,2);

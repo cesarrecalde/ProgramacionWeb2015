@@ -58,22 +58,17 @@ public class ProviderResourceRESTService {
     @Inject
     ProviderRemove providerRemove;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Provider> listAllProviders() {
-        return repository.findAllOrderedByName();
-    }
+
 
     @GET
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Provider lookupProviderById(@PathParam("id") long id) {
-        Provider provider = repository.findById(id);
-        if (provider == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return provider;
+    public List<Provider> listAllProviders(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedByName(position);
     }
+
+
 
 
     @DELETE

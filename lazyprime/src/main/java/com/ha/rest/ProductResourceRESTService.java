@@ -56,23 +56,15 @@ public class ProductResourceRESTService {
     @Inject
     ProductRegistration registration;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Product> listAllProducts() {
-        return repository.findAllOrderedByName();
-    }
+
 
     @GET
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Product lookupProductById(@PathParam("id") long id) {
-        Product product = repository.findById(id);
-        if (product == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return product;
+    public List<Product> listAllProducts(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedByName(position);
     }
-
     /**
      * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.

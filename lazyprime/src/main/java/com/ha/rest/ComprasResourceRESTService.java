@@ -19,7 +19,6 @@ package com.ha.rest;
 import com.ha.data.ComprasRepository;
 import com.ha.data.ProductRepository;
 import com.ha.model.Compra;
-import com.ha.model.Product;
 import com.ha.service.CompraRegistration;
 import com.ha.service.CompraRemove;
 
@@ -61,22 +60,14 @@ public class ComprasResourceRESTService {
     @Inject
     private ProductRepository productRepository;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Compra> listAllCompras() {
-        return repository.findAllOrderedByDate();
-    }
 
 
     @GET
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Compra lookupCompraById(@PathParam("id") long id) {
-        Compra compra = repository.findById(id);
-        if (compra == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return compra;
+    public List<Compra> listAllCompras(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedByDate(position);
     }
 
     /**

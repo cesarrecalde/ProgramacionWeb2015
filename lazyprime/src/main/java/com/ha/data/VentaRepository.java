@@ -16,7 +16,6 @@
  */
 package com.ha.data;
 
-import com.ha.model.Compra;
 import com.ha.model.Venta;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,11 +37,11 @@ public class VentaRepository {
     }
 
 
-    public List<Venta> findAllOrderedByDate() {
+    public List<Venta> findAllOrderedByDate(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Venta> criteria = cb.createQuery(Venta.class);
         Root<Venta> ventaRoot = criteria.from(Venta.class);
         criteria.select(ventaRoot).orderBy(cb.asc(ventaRoot.get("fecha")));
-        return em.createQuery(criteria).getResultList();
+        return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
     }
 }

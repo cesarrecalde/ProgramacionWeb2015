@@ -37,11 +37,11 @@ public class ComprasRepository {
     }
 
 
-    public List<Compra> findAllOrderedByDate() {
+    public List<Compra> findAllOrderedByDate(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Compra> criteria = cb.createQuery(Compra.class);
         Root<Compra> compraRoot = criteria.from(Compra.class);
         criteria.select(compraRoot).orderBy(cb.asc(compraRoot.get("fecha")));
-        return em.createQuery(criteria).getResultList();
+        return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
     }
 }

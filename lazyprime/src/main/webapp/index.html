@@ -117,6 +117,12 @@
                             </td>
                         </tr>
                     </table>
+                    <nav>
+                        <ul class="pager">
+                            <li><a ng-click="pagination.anteriorProveedor()" href="#">Anterior</a></li>
+                            <li><a ng-hide="providers.length != 5 " ng-click="pagination.siguienteProveedor()" href="#"> Siguiente</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="col-md-3"></div>
             </div>
@@ -151,6 +157,12 @@
                                 <td>{{ cliente.name }}</td>
                             </tr>
                         </table>
+                        <nav>
+                            <ul class="pager">
+                                <li><a ng-click="pagination.anteriorCliente()" href="#">Anterior</a></li>
+                                <li><a ng-hide="listaDeClientes.length != 5 " ng-click="pagination.siguienteCliente()" href="#"> Siguiente</a></li>
+                            </ul>
+                        </nav>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
@@ -220,6 +232,12 @@
                             </td>
                         </tr>
                     </table>
+                    <nav>
+                        <ul class="pager">
+                            <li><a ng-click="pagination.anteriorProducto()" href="#">Anterior</a></li>
+                            <li><a ng-hide="products.length != 5 " ng-click="pagination.siguienteProducto()" href="#"> Siguiente</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -252,7 +270,12 @@
                             </td>
                         </tr>
                     </table>
-
+                    <nav>
+                        <ul class="pager">
+                            <li><a ng-click="pagination.anteriorCarritoCompra()" href="#">Anterior</a></li>
+                            <li><a ng-hide="listaDePedidoCompra.length != 5 " ng-click="pagination.siguienteCarritoCompra()" href="#"> Siguiente</a></li>
+                        </ul>
+                    </nav>
                     <button ng-click="compraPedido(listaDePedidoCompra)" ng-show="listaDePedidoCompra.length > 0">Comprar todo</button>
                 </div>
                 <div class="col-md-2"></div>
@@ -287,6 +310,12 @@
                             </td>
                         </tr>
                     </table>
+                    <nav>
+                        <ul class="pager">
+                            <li><a ng-click="pagination.anteriorCarritoVenta()" href="#">Anterior</a></li>
+                            <li><a ng-hide="listaDePedidoVenta.length != 5 " ng-click="pagination.siguienteCarritoVenta()" href="#"> Siguiente</a></li>
+                        </ul>
+                    </nav>
                     <select  ng-model="cliente_venta">
                         <option ng-repeat="cliente in listaDeClientes"
                                 value="{{cliente}}">{{cliente.name}}</option>
@@ -320,6 +349,12 @@
                             <td align="center">{{item.fecha}}</td>
                         </tr>
                     </table>
+                    <nav>
+                        <ul class="pager">
+                            <li><a ng-click="pagination.anteriorCompra()" href="#">Anterior</a></li>
+                            <li><a ng-hide="listaDeCompras.length != 5 " ng-click="pagination.siguienteCompra()" href="#"> Siguiente</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -352,6 +387,12 @@
                             <td align="center">{{item.fecha}}</td>
                         </tr>
                     </table>
+                    <nav>
+                        <ul class="pager">
+                            <li><a ng-click="pagination.anteriorVenta()" href="#">Anterior</a></li>
+                            <li><a ng-hide="listaDeVentas.length != 5 " ng-click="pagination.siguienteVenta()" href="#"> Siguiente</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="col-md-2"></div>
             </div>

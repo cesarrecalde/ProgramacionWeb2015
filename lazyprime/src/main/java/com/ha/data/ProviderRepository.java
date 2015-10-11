@@ -37,12 +37,12 @@ public class ProviderRepository {
     }
 
 
-    public List<Provider> findAllOrderedByName() {
+    public List<Provider> findAllOrderedByName(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Provider> criteria = cb.createQuery(Provider.class);
         Root<Provider> providerRoot = criteria.from(Provider.class);
         criteria.select(providerRoot).orderBy(cb.asc(providerRoot.get("name")));
-        return em.createQuery(criteria).getResultList();
+        return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
     }
 
     public Provider findAllByName(String name) {

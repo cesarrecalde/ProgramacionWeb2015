@@ -58,22 +58,12 @@ public class ComprasDetallesResourceRESTService {
     CompraDetalleRegistration registration;
 
     @GET
+    @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CompraDetalle> listAllCompraDetalles() {
-        return repository.findAllOrderedById();
+    public List<CompraDetalle> listAllCompraDetalles(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedById(position);
     }
-
-    @GET
-    @Path("/{id:[0-9][0-9]*}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public CompraDetalle lookupCompraDetalleById(@PathParam("id") long id) {
-        CompraDetalle compraDetalle = repository.findById(id);
-        if (compraDetalle == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return compraDetalle;
-    }
-
     /**
      * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.

@@ -17,6 +17,13 @@ var app = angular.module('myApp', ['ngRoute'])
         $scope.tables = [];
         $scope.options = [];
         $scope.pagination = [];
+        $scope.siguienteProveedor = 0;
+        $scope.siguienteProducto = 0;
+        $scope.siguienteCarritoCompra = 0;
+        $scope.siguienteCompra = 0;
+        $scope.siguienteCliente = 0;
+        $scope.siguienteVenta = 0;
+        $scope.siguienteCarritoVenta = 0;
 
 
         $scope.request = function(caseRequest){
@@ -24,49 +31,49 @@ var app = angular.module('myApp', ['ngRoute'])
             switch (caseRequest) {
                 case "loadPage":
                     $scope.progress = 0;
-                    $http.get("http://localhost:8080/lazyprime/rest/providers")
+                    $http.get("http://localhost:8080/lazyprime/rest/providers/"+$scope.siguienteProveedor)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 20;
                             $scope.providers = response;
                         }).error(function(response){
                             $scope.progress = $scope.progress + 20;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/products")
+                    $http.get("http://localhost:8080/lazyprime/rest/products/"+$scope.siguienteProducto)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 20;
                             $scope.products = response;
                         }).error(function(response){
                             $scope.progress = $scope.progress + 20;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/comprasDetalles")
+                    $http.get("http://localhost:8080/lazyprime/rest/comprasDetalles/"+$scope.siguienteCarritoCompra)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 10;
                             $scope.listaDePedidoCompra = response;
                         }).error(function(response){
                             $scope.progress = $scope.progress + 10;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/compras")
+                    $http.get("http://localhost:8080/lazyprime/rest/compras/"+$scope.siguienteCompra)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 10;
                             $scope.listaDeCompras = response;
                         }).error(function(response){
                             $scope.progress = $scope.progress + 10;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/clients")
+                    $http.get("http://localhost:8080/lazyprime/rest/clients/"+$scope.siguienteCliente)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 20;
                             $scope.listaDeClientes = response;
                         }).error(function(response){
                             $scope.progress = $scope.progress + 20;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/ventas")
+                    $http.get("http://localhost:8080/lazyprime/rest/ventas/"+$scope.siguienteVenta)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 10;
                             $scope.listaDeVentas = response;
                         }).error(function(response){
                             $scope.progress = $scope.progress + 10;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/ventasDetalles")
+                    $http.get("http://localhost:8080/lazyprime/rest/ventasDetalles/"+$scope.siguienteCarritoVenta)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 10;
                             $scope.listaDePedidoVenta = response;
@@ -80,24 +87,97 @@ var app = angular.module('myApp', ['ngRoute'])
 
 
         //Funciones para la paginacion remota
-        $scope.pagination.main = {
-            page: 1,
-            take: 15
-        };
 
-        $scope.pagination.nextPage = function() {
-            if ($scope.pagination.main.page < $scope.metas.total_pages) {
-                $scope.pagination.main.page++;
+        // Proveedor
+        $scope.pagination.siguienteProveedor = function () {
+            $scope.siguienteProveedor = $scope.siguienteProveedor + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorProveedor = function () {
+            if( $scope.siguienteProveedor > 0){
+                $scope.siguienteProveedor = $scope.siguienteProveedor - 5;
                 $scope.request('loadPage');
             }
-        };
+        }
 
-        $scope.pagination.previousPage = function() {
-            if ($scope.pagination.main.page > 1) {
-                $scope.pagination.main.page--;
+        // Cliente
+        $scope.pagination.siguienteCliente = function () {
+            $scope.siguienteCliente = $scope.siguienteCliente + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorCliente = function () {
+            if( $scope.siguienteCliente > 0){
+                $scope.siguienteCliente = $scope.siguienteCliente - 5;
                 $scope.request('loadPage');
             }
-        };
+        }
+
+        // Producto
+        $scope.pagination.siguienteProducto = function () {
+            $scope.siguienteProducto = $scope.siguienteProducto + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorProducto = function () {
+            if( $scope.siguienteProducto > 0){
+                $scope.siguienteProducto = $scope.siguienteProducto - 5;
+                $scope.request('loadPage');
+            }
+        }
+
+        // Carrito compra
+        $scope.pagination.siguienteCarritoCompra = function () {
+            $scope.siguienteCarritoCompra = $scope.siguienteCarritoCompra + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorCarritoCompra = function () {
+            if( $scope.siguienteCarritoCompra > 0){
+                $scope.siguienteCarritoCompra = $scope.siguienteCarritoCompra - 5;
+                $scope.request('loadPage');
+            }
+        }
+
+        // Carrito venta
+        $scope.pagination.siguienteCarritoVenta = function () {
+            $scope.siguienteCarritoVenta = $scope.siguienteCarritoVenta + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorCarritoVenta = function () {
+            if( $scope.siguienteCarritoVenta > 0){
+                $scope.siguienteCarritoVenta = $scope.siguienteCarritoVenta - 5;
+                $scope.request('loadPage');
+            }
+        }
+
+        // Venta
+        $scope.pagination.siguienteVenta = function () {
+            $scope.siguienteVenta = $scope.siguienteVenta + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorVenta = function () {
+            if( $scope.siguienteVenta > 0){
+                $scope.siguienteVenta = $scope.siguienteVenta - 5;
+                $scope.request('loadPage');
+            }
+        }
+
+        // Compra
+        $scope.pagination.siguienteCompra = function () {
+            $scope.siguienteCompra = $scope.siguienteCompra + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorCompra = function () {
+            if( $scope.siguienteCompra > 0){
+                $scope.siguienteCompra = $scope.siguienteCompra - 5;
+                $scope.request('loadPage');
+            }
+        }
 
 
         // Funciones de registro

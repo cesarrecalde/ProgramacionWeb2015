@@ -16,14 +16,9 @@
  */
 package com.ha.rest;
 
-import com.ha.data.ComprasRepository;
 import com.ha.data.ProductRepository;
 import com.ha.data.VentaRepository;
-import com.ha.model.Compra;
-import com.ha.model.Product;
 import com.ha.model.Venta;
-import com.ha.service.CompraRegistration;
-import com.ha.service.CompraRemove;
 import com.ha.service.VentaRegistration;
 import com.ha.service.VentaRemove;
 
@@ -66,21 +61,11 @@ public class VentaResourceRESTService {
     private ProductRepository productRepository;
 
     @GET
+    @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Venta> listAllVentas() {
-        return repository.findAllOrderedByDate();
-    }
-
-
-    @GET
-    @Path("/{id:[0-9][0-9]*}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Venta lookupVentaById(@PathParam("id") long id) {
-        Venta venta = repository.findById(id);
-        if (venta == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return venta;
+    public List<Venta> listAllVenta(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedByDate(position);
     }
 
     /**

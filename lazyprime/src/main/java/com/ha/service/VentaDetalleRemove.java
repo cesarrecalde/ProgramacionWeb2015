@@ -16,8 +16,6 @@
  */
 package com.ha.service;
 
-import com.ha.model.Compra;
-import com.ha.model.Venta;
 import com.ha.model.VentaDetalle;
 
 import javax.ejb.Stateless;

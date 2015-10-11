@@ -53,21 +53,13 @@ public class ClientResourceRESTService {
     ClientRegistration registration;
 
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Client> listAllClients() {
-        return repository.findAllOrderedByName();
-    }
 
     @GET
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Client lookupClientById(@PathParam("id") long id) {
-        Client client = repository.findById(id);
-        if (client == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return client;
+    public List<Client> listAllClients(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedByName(position);
     }
 
     /**
