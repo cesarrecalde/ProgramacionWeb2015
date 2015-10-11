@@ -71,7 +71,7 @@ public class CompraRegistration {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void reducirCantidadDeProducto(int cantidad, Product producto) throws Exception{
         Product p = em.find(Product.class, producto.getId());
-        p.setCantidad(p.getCantidad() - cantidad);
+        p.setCantidad(p.getCantidad() + cantidad);
 
         if (p.getCantidad() < 0){
             throw new Exception("Cantidad no disponible.");
