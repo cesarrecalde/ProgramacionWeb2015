@@ -39,6 +39,5 @@ public class CompraDetalleRegistration {
 
     public void register(CompraDetalle compraDetalle) throws Exception {
         em.persist(compraDetalle);
-        compraDetalleEvent.fire(compraDetalle);
     }
 }

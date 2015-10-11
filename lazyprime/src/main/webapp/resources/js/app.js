@@ -52,17 +52,34 @@ var app = angular.module('myApp', ['ngRoute'])
             $scope.tables = [];
             switch (caseRequest) {
                 case "loadPage":
+                    $scope.progress = 0;
                     $http.get("http://localhost:8080/lazyprime/rest/providers")
                         .success(function(response) {
+                            $scope.progress = $scope.progress + 20;
                             $scope.providers = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 20;
                         })
                     $http.get("http://localhost:8080/lazyprime/rest/products")
                         .success(function(response) {
+                            $scope.progress = $scope.progress + 20;
                             $scope.products = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 20;
                         })
                     $http.get("http://localhost:8080/lazyprime/rest/comprasDetalles")
                         .success(function(response) {
+                            $scope.progress = $scope.progress + 20;
+                            $scope.listaDePedido = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 20;
+                        })
+                    $http.get("http://localhost:8080/lazyprime/rest/compras")
+                        .success(function(response) {
+                            $scope.progress = $scope.progress + 40;
                             $scope.listaDeCompras = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 40;
                         })
                     break;
             }
@@ -106,20 +123,18 @@ var app = angular.module('myApp', ['ngRoute'])
             })
         }
 
-        $scope.agregarACarritoDeCompra = function($producto,cantidadSolicitada){
+        $scope.agregarACarritoDeCompra = function(producto,cantidadSolicitada){
             $http({
-                url: 'http://localhost:8080/lazyprime/rest/compras',
+                url: 'http://localhost:8080/lazyprime/rest/comprasDetalles',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                data: {id:$producto.id , cantidadSolicitada:cantidadSolicitada }
+                data: {product:producto , cantidad:cantidadSolicitada}
             }).success(function() {
-                console.log(cantidadSolicitada);
                 $scope.request('loadPage');
             })
         }
 
         $scope.registrarProducto = function () {
-
             $http({
                 url: 'http://localhost:8080/lazyprime/rest/products',
                 method: 'POST',
@@ -133,6 +148,7 @@ var app = angular.module('myApp', ['ngRoute'])
                 $scope.request('loadPage');
             })
         }
+
 
         $scope.eliminarProductoDeListaDeCompras = function (id) {
             $http.delete("http://localhost:8080/lazyprime/rest/comprasDetalles/" + id).success(function() {
@@ -166,37 +182,26 @@ var app = angular.module('myApp', ['ngRoute'])
                 $scope.data = e.target.result;
             }
             r.readAsBinaryString(f);
-            console.log($scope.data);
+        }
 
+        $scope.comprarProducto = function (producto) {
+            console.log(producto);
+        }
+
+        $scope.comprarPedido = function(listaDePedidos){
+            $http({
+                url: 'http://localhost:8080/lazyprime/rest/compras',
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                data: {compraDetalles:listaDePedidos}
+            }).success(function(response) {
+                $scope.request('loadPage');
+            }).error(function (response) {
+                alert(response.error);
+            })
         }
 
         //Lista inicial
-        $http.get("http://localhost:8080/lazyprime/rest/providers")
-            .success(function(response) {
-                $scope.progress = $scope.progress + 30;
-                $scope.providers = response;
-            }).error(function(response){
-                console.log(response);
-                $scope.progress = $scope.progress + 30;
-            })
-
-        $http.get("http://localhost:8080/lazyprime/rest/products")
-            .success(function(response) {
-                $scope.progress = $scope.progress + 30;
-                $scope.products = response;
-            }).error(function(response){
-                console.log(response);
-                $scope.progress = $scope.progress + 30;
-            })
-        $http.get("http://localhost:8080/lazyprime/rest/compras")
-            .success(function(response) {
-                $scope.progress = $scope.progress + 30;
-                $scope.listaDeCompras = response;
-            }).error(function(response){
-                console.log(response);
-                $scope.progress = $scope.progress + 30;
-            })
-
-
+        $scope.request('loadPage');
 
     })

@@ -41,7 +41,8 @@ public class CompraDetalleRepository {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<CompraDetalle> criteria = cb.createQuery(CompraDetalle.class);
         Root<CompraDetalle> compraDetalleRoot = criteria.from(CompraDetalle.class);
-        criteria.select(compraDetalleRoot).orderBy(cb.asc(compraDetalleRoot.get("id")));
+        criteria.select(compraDetalleRoot).where(cb.isNull(compraDetalleRoot.get("compra_detalle"))).orderBy(cb.asc(compraDetalleRoot.get("id")));
+//        criteria.select(compraDetalleRoot).where(compraDetalleRoot.isNotNull(compraDetalleRoot.get("compra_detalle_id"))).orderBy(cb.asc(compraDetalleRoot.get("id")));
         return em.createQuery(criteria).getResultList();
     }
 }

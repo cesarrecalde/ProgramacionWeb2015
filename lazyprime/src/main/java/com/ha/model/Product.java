@@ -17,11 +17,13 @@
 package com.ha.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 
 @Entity
@@ -37,15 +39,15 @@ public class Product implements Serializable {
 
     @NotNull
     @Size(min = 1, max = 25)
-    @Pattern(regexp = "[^0-9]*", message = "No debe contener numeros el nombre del producto.")
     private String nameProduct;
 
 
-    @OneToOne(mappedBy = "product")
-    private CompraDetalle compraDetalle;
+    @OneToMany(mappedBy = "product")
+    private List<CompraDetalle> compraDetalle;
 
      private long precioUnitario;
 
+    @Min(0)
      private long cantidad;
 
     @ManyToOne(fetch = FetchType.EAGER)

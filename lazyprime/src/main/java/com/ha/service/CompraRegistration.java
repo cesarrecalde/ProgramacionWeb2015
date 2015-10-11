@@ -21,10 +21,15 @@ import com.ha.model.CompraDetalle;
 import com.ha.model.Product;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,37 +49,33 @@ public class CompraRegistration {
     @Inject
     private Event<CompraDetalle> compraDetalleEvent;
 
-    public void register(Product product,int cantidadAComprar) throws Exception {
-        Compra compra = new Compra();
-        CompraDetalle compraDetalle = new CompraDetalle();
-
-        compra.setProveedor(product.getProduct_provider().getName());
-        compra.setFecha(new java.util.Date());
-        em.persist(compra);
-
-        compraDetalle.setCantidad(cantidadAComprar);
-        compraDetalle.setProduct(product);
-
-
-        em.persist(compraDetalle);
-
-        if (compra.getCompraDetalles() != null) {
-            compra.getCompraDetalles().add(compraDetalle);
-        } else {
-            List<CompraDetalle> lista = new ArrayList();
-            lista.add(compraDetalle);
-            compra.setCompraDetalles(lista);
-        }
-
-
-        em.persist(compra);
-
-
-    }
-
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void register(Compra compra) throws Exception {
         compra.setFecha(new java.util.Date());
         em.persist(compra);
-        compraEvent.fire(compra);
+        //Esta parte actualizara los objetos que se encuentran en compra detalle
+        CompraDetalle cp;
+        for (CompraDetalle pedido: compra.getCompraDetalles()){
+            cp = em.find(CompraDetalle.class, pedido.getId());
+            cp.setCompra_detalle(compra);
+            em.persist(cp);
+
+            //Una vez que se guara de manera exitosa la compra se debe reducir el numero de cantidad en el producto comprado
+            reducirCantidadDeProducto(cp.getCantidad(),cp.getProduct());
+
+            cp = new CompraDetalle();
+        }
+
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    private void reducirCantidadDeProducto(int cantidad, Product producto) throws Exception{
+        Product p = em.find(Product.class, producto.getId());
+        p.setCantidad(p.getCantidad() - cantidad);
+
+        if (p.getCantidad() < 0){
+            throw new Exception("Cantidad no disponible.");
+        }
+        em.persist(p);
     }
 }

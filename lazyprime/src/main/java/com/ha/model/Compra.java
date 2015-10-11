@@ -34,23 +34,12 @@ public class Compra implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String proveedor;
-
-    private long cantidadSolicitada ;
-
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
     @OneToMany(mappedBy = "compra_detalle")
     private List<CompraDetalle> compraDetalles;
 
-    public List<CompraDetalle> getCompraDetalles() {
-        return compraDetalles;
-    }
-
-    public void setCompraDetalles(List<CompraDetalle> compraDetalles) {
-        this.compraDetalles = compraDetalles;
-    }
 
     public long getId() {
         return id;
@@ -68,10 +57,12 @@ public class Compra implements Serializable {
         this.fecha = fecha;
     }
 
+    public List<CompraDetalle> getCompraDetalles() {
+        return compraDetalles;
+    }
 
-
-
-    public Compra() {
+    public void setCompraDetalles(List<CompraDetalle> compraDetalles) {
+        this.compraDetalles = compraDetalles;
     }
 
     public Compra(Date fecha, List<CompraDetalle> compraDetalles) {
@@ -79,53 +70,6 @@ public class Compra implements Serializable {
         this.compraDetalles = compraDetalles;
     }
 
-    public Compra(Date fecha) {
-        this.fecha = fecha;
-
-    }
-
-
-
-    public String getProveedor() {
-        boolean proveedorUnico = false;
-        String proveedorInicial = "";
-        try {
-            proveedorInicial = compraDetalles.get(0).getProduct().getProduct_provider().getName();
-            for (CompraDetalle detalle: compraDetalles){
-                if (!detalle.getProduct().getProduct_provider().getName().equals(proveedorInicial)){
-                    proveedorUnico = false;
-                    break;
-                }
-            }
-        }catch (Exception e){
-            System.out.print(e.getStackTrace().toString());
-        }
-
-
-        if (proveedorUnico){
-            this.proveedor = proveedorInicial;
-        }else {
-            this.proveedor = "Varios proveedores";
-        }
-
-        return proveedor;
-    }
-
-
-
-    public Compra(long cantidadSolicitada) {
-        this.cantidadSolicitada = cantidadSolicitada;
-    }
-
-    public void setProveedor(String proveedor) {
-        this.proveedor = proveedor;
-    }
-
-    public long getCantidadSolicitada() {
-        return cantidadSolicitada;
-    }
-
-    public void setCantidadSolicitada(long cantidadSolicitada) {
-        this.cantidadSolicitada = cantidadSolicitada;
+    public Compra() {
     }
 }

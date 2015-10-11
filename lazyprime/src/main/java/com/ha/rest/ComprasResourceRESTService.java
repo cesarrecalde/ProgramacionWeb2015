@@ -89,16 +89,12 @@ public class ComprasResourceRESTService {
     public Response createCompra(Compra compra) {
         Response.ResponseBuilder builder = null;
         try {
-            int cantidadAComprar =  (int)compra.getCantidadSolicitada();
-            Product p = productRepository.findById(compra.getId());
-//            validateCompra(compra);
-            registration.register(p,cantidadAComprar);
-
+            registration.register(compra);
             builder = Response.ok();
         } catch (Exception e) {
             // Handle generic exceptions
             Map<String, String> responseObj = new HashMap<String, String>();
-            responseObj.put("error", e.getMessage());
+            responseObj.put("error", "No existen todos los elementos para la compra");
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
         }
 

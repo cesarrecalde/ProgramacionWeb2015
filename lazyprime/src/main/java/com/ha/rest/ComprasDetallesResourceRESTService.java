@@ -47,6 +47,7 @@ public class ComprasDetallesResourceRESTService {
     @Inject
     private Validator validator;
 
+
     @Inject
     private CompraDetalleRepository repository;
 
@@ -84,6 +85,7 @@ public class ComprasDetallesResourceRESTService {
         Response.ResponseBuilder builder = null;
         try {
             // Validates member using bean validation
+
             validateCompraDetalle(compraDetalle);
             registration.register(compraDetalle);
             // Create an "ok" response

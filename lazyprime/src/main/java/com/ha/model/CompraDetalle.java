@@ -36,10 +36,11 @@ public class CompraDetalle implements Serializable {
     @Min(1)
     private int cantidad;
 
+
     @ManyToOne
     private Compra compra_detalle;
 
-    @OneToOne
+    @ManyToOne
     private Product product;
 
     public Product getProduct() {
@@ -69,5 +70,7 @@ public class CompraDetalle implements Serializable {
     public CompraDetalle() {
     }
 
-
+    public void setCompra_detalle(Compra compra_detalle) {
+        this.compra_detalle = compra_detalle;
+    }
 }
