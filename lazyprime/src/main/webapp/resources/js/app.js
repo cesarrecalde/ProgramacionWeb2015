@@ -193,12 +193,12 @@ var app = angular.module('myApp', ['ngRoute'])
             })
         }
 
-        $scope.ventaPedido = function(listaDePedidos){
-            $http({
+        $scope.ventaPedido = function(listaDePedidos, cliente){
+             $http({
                 url: 'http://localhost:8080/lazyprime/rest/ventas',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                data: {ventaDetalles:listaDePedidos}
+                data: {client:cliente,ventaDetalles:listaDePedidos}
             }).success(function(response) {
                 $scope.request('loadPage');
             }).error(function (response) {

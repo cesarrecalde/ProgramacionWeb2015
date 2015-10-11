@@ -16,7 +16,11 @@
  */
 package com.ha.service;
 
-import com.ha.model.*;
+import com.google.gson.Gson;
+import com.ha.model.Client;
+import com.ha.model.Product;
+import com.ha.model.Venta;
+import com.ha.model.VentaDetalle;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -24,11 +28,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.logging.Logger;
 
 // The @Stateless annotation eliminates the need for manual transaction demarcation
@@ -50,6 +49,9 @@ public class VentaRegistration {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void register(Venta venta) throws Exception {
         venta.setFecha(new java.util.Date());
+        Gson ob = new Gson();
+        Client c = ob.fromJson(venta.getClient().getName(), Client.class);
+        venta.setClient(c);
         em.persist(venta);
         //Esta parte actualizara los objetos que se encuentran en venta detalle
         VentaDetalle cp;

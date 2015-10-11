@@ -31,6 +31,17 @@ public class Venta {
     public Venta() {
     }
 
+    public Venta(Client client, Date fecha, List<VentaDetalle> ventaDetalles) {
+        this.client = client;
+        this.fecha = fecha;
+        this.ventaDetalles = ventaDetalles;
+    }
+
+    public Venta(Date fecha, Client client) {
+        this.fecha = fecha;
+        this.client = client;
+    }
+
     public long getId() {
         return id;
     }

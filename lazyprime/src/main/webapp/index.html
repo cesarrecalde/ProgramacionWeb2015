@@ -215,7 +215,9 @@
                             <td align="center">{{ producto.product_provider.name }}</td>
                             <td align="center"><input  ng-init="cantidadSolicitada = 0" ng-model="cantidadSolicitada" type="number" min="0"></td>
                             <td align="center"><button ng-click="agregarACarritoDeCompra(producto,cantidadSolicitada)" class="glyphicon glyphicon-shopping-cart" ng-hide="cantidadSolicitada == 0" aria-hidden="true"> </td>
-                            <td align="center"><button ng-click="agregarACarritoDeVenta(producto,cantidadSolicitada)" class="glyphicon glyphicon-usd" ng-hide="cantidadSolicitada == 0" aria-hidden="true"> </td>
+                            <td align="center">
+                                <button ng-click="agregarACarritoDeVenta(producto,cantidadSolicitada)" class="glyphicon glyphicon-usd" ng-hide="cantidadSolicitada == 0" aria-hidden="true">
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -250,6 +252,7 @@
                             </td>
                         </tr>
                     </table>
+
                     <button ng-click="compraPedido(listaDePedidoCompra)" ng-show="listaDePedidoCompra.length > 0">Comprar todo</button>
                 </div>
                 <div class="col-md-2"></div>
@@ -284,7 +287,11 @@
                             </td>
                         </tr>
                     </table>
-                    <button ng-click="ventaPedido(listaDePedidoVenta)" ng-show="listaDePedidoVenta.length > 0">Comprar todo</button>
+                    <select  ng-model="cliente_venta">
+                        <option ng-repeat="cliente in listaDeClientes"
+                                value="{{cliente}}">{{cliente.name}}</option>
+                    </select>
+                    <button ng-click="ventaPedido(listaDePedidoVenta, cliente_venta)" ng-show="listaDePedidoVenta.length > 0">Realizar venta</button>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -306,7 +313,7 @@
                                 <div align="center">
                                     <select>
                                         <option ng-repeat="producto in item.compraDetalles">
-                                            {{producto.product.nameProduct}} - {{producto.cantidad}} Unidades</option>
+                                           Proveedor {{producto.product.product_provider.name}} - Producto {{producto.product.nameProduct}} - {{producto.cantidad}} Unidades</option>
                                     </select>
                                 </div>
                             </td>
@@ -328,6 +335,7 @@
                         <thead>
                         <td align="center">ID</td>
                         <td align="center">Productos Vendidos</td>
+                        <td align="center">Cliente que realizo la compra</td>
                         <td align="center">Fecha de compra</td>
                         </thead>
                         <tr ng-repeat="item in listaDeVentas | orderBy:'id' ">
@@ -340,6 +348,7 @@
                                     </select>
                                 </div>
                             </td>
+                            <td align="center">{{item.client.name}}</td>
                             <td align="center">{{item.fecha}}</td>
                         </tr>
                     </table>
