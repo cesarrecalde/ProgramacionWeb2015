@@ -16,9 +16,11 @@
  */
 package com.ha.service;
 
+import com.google.gson.Gson;
 import com.ha.model.Compra;
 import com.ha.model.CompraDetalle;
 import com.ha.model.Product;
+import com.ha.model.Provider;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -46,31 +48,46 @@ public class CompraRegistration {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void register(Compra compra) throws Exception {
+//        compra.setFecha(new java.util.Date());
+//        em.persist(compra);
+//        //Esta parte actualizara los objetos que se encuentran en compra detalle
+//        CompraDetalle cp;
+//        for (CompraDetalle pedido: compra.getCompraDetalles()){
+//            cp = em.find(CompraDetalle.class, pedido.getId());
+////            cp.setCompra_detalle(compra);
+//            em.persist(cp);
+//
+//            //Una vez que se guara de manera exitosa la compra se debe reducir el numero de cantidad en el producto comprado
+//            reducirCantidadDeProducto(cp.getCantidad(),cp.getProduct());
+//
+//            cp = new CompraDetalle();
+//        }
+
+
+        for (CompraDetalle detalle : compra.getCompraDetalles()) {
+            reducirCantidadDeProducto(detalle.getCantidad(), detalle.getProduct());
+        }
+
+
+        Gson gson = new Gson();
+        Provider provider = gson.fromJson(compra.getProvider().getName(), Provider.class);
+        compra.setProvider(provider);
         compra.setFecha(new java.util.Date());
         em.persist(compra);
-        //Esta parte actualizara los objetos que se encuentran en compra detalle
-        CompraDetalle cp;
-        for (CompraDetalle pedido: compra.getCompraDetalles()){
-            cp = em.find(CompraDetalle.class, pedido.getId());
-            cp.setCompra_detalle(compra);
-            em.persist(cp);
 
-            //Una vez que se guara de manera exitosa la compra se debe reducir el numero de cantidad en el producto comprado
-            reducirCantidadDeProducto(cp.getCantidad(),cp.getProduct());
-
-            cp = new CompraDetalle();
+        for (CompraDetalle detalle: compra.getCompraDetalles()){
+            CompraDetalle compraDetalle = em.find(CompraDetalle.class, detalle.getId());
+            compraDetalle.setCompra(compra);
+            em.persist(compraDetalle);
         }
+
 
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void reducirCantidadDeProducto(int cantidad, Product producto) throws Exception{
+//    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    private void reducirCantidadDeProducto(int cantidad, Product producto){
         Product p = em.find(Product.class, producto.getId());
         p.setCantidad(p.getCantidad() + cantidad);
-
-        if (p.getCantidad() < 0){
-            throw new Exception("Cantidad no disponible.");
-        }
         em.persist(p);
     }
 }

@@ -1,53 +1,44 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.ha.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 
-
+/**
+ * Created by fede on 11/10/15.
+ */
 @Entity
 @XmlRootElement
-@Table(name = "COMPRAS_DET")
-public class CompraDetalle implements Serializable {
-    /** 242352345 **/
+@Table(name = "COMPRA_DET")
+public class CompraDetalle {
+
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ManyToOne
+    private Compra compra;
+
     @Min(1)
     private int cantidad;
-
-
-    @ManyToOne
-    private Compra compra_detalle;
 
     @ManyToOne
     private Product product;
 
-    public Product getProduct() {
-        return product;
+
+    public CompraDetalle() {
     }
 
-    public void setProduct(Product product) {
+    public CompraDetalle(int cantidad, Product product) {
+        this.cantidad = cantidad;
+        this.product = product;
+    }
+
+    public CompraDetalle(Compra compra, int cantidad, Product product) {
+        this.compra = compra;
+        this.cantidad = cantidad;
         this.product = product;
     }
 
@@ -59,6 +50,10 @@ public class CompraDetalle implements Serializable {
         this.id = id;
     }
 
+    public void setCompra(Compra compra) {
+        this.compra = compra;
+    }
+
     public int getCantidad() {
         return cantidad;
     }
@@ -67,10 +62,11 @@ public class CompraDetalle implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public CompraDetalle() {
+    public Product getProduct() {
+        return product;
     }
 
-    public void setCompra_detalle(Compra compra_detalle) {
-        this.compra_detalle = compra_detalle;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

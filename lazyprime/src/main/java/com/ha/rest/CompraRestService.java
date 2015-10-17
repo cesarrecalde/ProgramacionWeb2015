@@ -17,10 +17,8 @@
 package com.ha.rest;
 
 import com.ha.data.ComprasRepository;
-import com.ha.data.ProductRepository;
 import com.ha.model.Compra;
 import com.ha.service.CompraRegistration;
-import com.ha.service.CompraRemove;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -41,15 +39,13 @@ import java.util.logging.Logger;
  */
 @Path("/compras")
 @RequestScoped
-public class ComprasResourceRESTService {
+public class CompraRestService {
     @Inject
     private Logger log;
 
     @Inject
     private Validator validator;
 
-    @Inject
-    private CompraRemove compraRemove;
 
     @Inject
     private ComprasRepository repository;
@@ -57,8 +53,6 @@ public class ComprasResourceRESTService {
     @Inject
     CompraRegistration registration;
 
-    @Inject
-    private ProductRepository productRepository;
 
 
 
@@ -82,11 +76,13 @@ public class ComprasResourceRESTService {
         try {
             registration.register(compra);
             builder = Response.ok();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             // Handle generic exceptions
+            log.info(">>>>>>>>>>>>>   "+e.getCause());
             Map<String, String> responseObj = new HashMap<String, String>();
             responseObj.put("error", "No existen todos los elementos para la compra");
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+
         }
 
         return builder.build();

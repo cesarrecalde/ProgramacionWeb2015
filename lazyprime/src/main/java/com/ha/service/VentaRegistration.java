@@ -73,9 +73,10 @@ public class VentaRegistration {
         Product p = em.find(Product.class, producto.getId());
         p.setCantidad(p.getCantidad() - cantidad);
 
-        if (p.getCantidad() < 0){
-            throw new Exception("Cantidad no disponible.");
+        if ((p.getCantidad() - cantidad) < 0) {
+            throw new Error("No existen elementos para el producto "+p.getNameProduct());
         }
+
         em.persist(p);
     }
 }

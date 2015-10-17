@@ -82,6 +82,8 @@ public class VentaResourceRESTService {
             builder = Response.ok();
         } catch (Exception e) {
             // Handle generic exceptions
+            log.info(">>>>>>>>>>>>>   "+e.getCause());
+
             Map<String, String> responseObj = new HashMap<String, String>();
             responseObj.put("error", "No existen todos los elementos para la venta");
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);

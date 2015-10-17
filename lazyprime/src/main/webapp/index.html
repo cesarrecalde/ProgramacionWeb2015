@@ -234,6 +234,7 @@
                     </table>
                     <nav>
                         <ul class="pager">
+                            <li><a ng-click="ordenarPorPrecioProducto()" href="#">Ordenar por precio</a></li>
                             <li><a ng-click="pagination.anteriorProducto()" href="#">Anterior</a></li>
                             <li><a ng-hide="products.length != 5 " ng-click="pagination.siguienteProducto()" href="#"> Siguiente</a></li>
                         </ul>
@@ -270,13 +271,18 @@
                             </td>
                         </tr>
                     </table>
+                    Proveedor:
+                    <select  ng-model="proveedor_venta">
+                        <option ng-repeat="proveedor in providers"
+                                value="{{proveedor}}">{{proveedor.name}}</option>
+                    </select>
                     <nav>
                         <ul class="pager">
                             <li><a ng-click="pagination.anteriorCarritoCompra()" href="#">Anterior</a></li>
                             <li><a ng-hide="listaDePedidoCompra.length != 5 " ng-click="pagination.siguienteCarritoCompra()" href="#"> Siguiente</a></li>
                         </ul>
                     </nav>
-                    <button ng-click="compraPedido(listaDePedidoCompra)" ng-show="listaDePedidoCompra.length > 0">Comprar todo</button>
+                    <button ng-click="compraPedido(listaDePedidoCompra,proveedor_venta)" ng-show="listaDePedidoCompra.length > 0">Comprar todo</button>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -334,6 +340,7 @@
                         <thead>
                         <td align="center">ID</td>
                         <td align="center">Productos comprados</td>
+                        <td align="center">Proveedor</td>
                         <td align="center">Fecha de compra</td>
                         </thead>
                         <tr ng-repeat="item in listaDeCompras | orderBy:'id' ">
@@ -342,10 +349,11 @@
                                 <div align="center">
                                     <select>
                                         <option ng-repeat="producto in item.compraDetalles">
-                                           Proveedor {{producto.product.product_provider.name}} - Producto {{producto.product.nameProduct}} - {{producto.cantidad}} Unidades</option>
+                                             Producto {{producto.product.nameProduct}} - {{producto.cantidad}} Unidades</option>
                                     </select>
                                 </div>
                             </td>
+                            <td align="center">{{item.provider.name}}</td>
                             <td align="center">{{item.fecha}}</td>
                         </tr>
                     </table>

@@ -57,18 +57,23 @@ public class ProductResourceRESTService {
     ProductRegistration registration;
 
 
-
     @GET
     @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Product> listAllProducts(@PathParam("position") int position) {
+    public List<Product> listAllProduct(@PathParam("position") int position) {
         // si position es 5 comenzara desde la posicion 5 a traer los elementos
         return repository.findAllOrderedByName(position);
     }
-    /**
-     * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
-     * or with a map of fields, and related errors.
-     */
+
+    @GET
+    @Path("/ordenByPrice/{position:[0-9][0-9]*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Product> listAllProductByPrice(@PathParam("position") int position) {
+        // si position es 5 comenzara desde la posicion 5 a traer los elementos
+        return repository.findAllOrderedByName(position);
+    }
+
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -137,5 +142,6 @@ public class ProductResourceRESTService {
         return Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
     }
 
+   }
 
-}
+

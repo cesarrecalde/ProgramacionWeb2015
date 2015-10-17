@@ -1,33 +1,18 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.ha.model;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Created by fede on 11/10/15.
+ */
 @Entity
 @XmlRootElement
 @Table(name = "COMPRA")
-public class Compra implements Serializable {
-    /** 242352345 **/
+public class Compra {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -37,9 +22,20 @@ public class Compra implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    @OneToMany(mappedBy = "compra_detalle")
+    @OneToMany(mappedBy = "compra")
     private List<CompraDetalle> compraDetalles;
 
+    @ManyToOne
+    private Provider provider;
+
+    public Compra() {
+    }
+
+    public Compra(Date fecha, List<CompraDetalle> compraDetalles, Provider provider) {
+        this.fecha = fecha;
+        this.compraDetalles = compraDetalles;
+        this.provider = provider;
+    }
 
     public long getId() {
         return id;
@@ -65,11 +61,11 @@ public class Compra implements Serializable {
         this.compraDetalles = compraDetalles;
     }
 
-    public Compra(Date fecha, List<CompraDetalle> compraDetalles) {
-        this.fecha = fecha;
-        this.compraDetalles = compraDetalles;
+    public Provider getProvider() {
+        return provider;
     }
 
-    public Compra() {
+    public void setProvider(Provider provider) {
+        this.provider = provider;
     }
 }

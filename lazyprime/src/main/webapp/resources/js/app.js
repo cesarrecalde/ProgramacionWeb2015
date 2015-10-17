@@ -10,7 +10,7 @@ var app = angular.module('myApp', ['ngRoute'])
 
 
 
-    .controller('elementsController', function($scope, $http) {
+    .controller('elementsController', function($scope, $http, $sce) {
         //Token for Authorization
         $http.defaults.headers.common.Authorization = 'Bearer 096fa935862e4c55db73e8f153ef867f'
         $scope.filter = {};
@@ -24,6 +24,8 @@ var app = angular.module('myApp', ['ngRoute'])
         $scope.siguienteCliente = 0;
         $scope.siguienteVenta = 0;
         $scope.siguienteCarritoVenta = 0;
+        $scope.siguienteSolicitud = 0;
+        $scope.orderByPriceProduct = '';
 
 
         $scope.request = function(caseRequest){
@@ -38,14 +40,14 @@ var app = angular.module('myApp', ['ngRoute'])
                         }).error(function(response){
                             $scope.progress = $scope.progress + 20;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/products/"+$scope.siguienteProducto)
+                    $http.get("http://localhost:8080/lazyprime/rest/products"+$scope.orderByPriceProduct+"/"+$scope.siguienteProducto)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 20;
                             $scope.products = response;
                         }).error(function(response){
                             $scope.progress = $scope.progress + 20;
                         })
-                    $http.get("http://localhost:8080/lazyprime/rest/comprasDetalles/"+$scope.siguienteCarritoCompra)
+                    $http.get("http://localhost:8080/lazyprime/rest/compraDetalle/"+$scope.siguienteCarritoCompra)
                         .success(function(response) {
                             $scope.progress = $scope.progress + 10;
                             $scope.listaDePedidoCompra = response;
@@ -80,6 +82,13 @@ var app = angular.module('myApp', ['ngRoute'])
                         }).error(function(response){
                             $scope.progress = $scope.progress + 10;
                         })
+                    $http.get("http://localhost:8080/lazyprime/rest/solicitudes/"+$scope.siguienteSolicitud)
+                        .success(function(response) {
+                            $scope.progress = $scope.progress + 10;
+                            $scope.solicitudes = response;
+                        }).error(function(response){
+                            $scope.progress = $scope.progress + 10;
+                        })
 
                     break;
             }
@@ -91,6 +100,17 @@ var app = angular.module('myApp', ['ngRoute'])
         // Proveedor
         $scope.pagination.siguienteProveedor = function () {
             $scope.siguienteProveedor = $scope.siguienteProveedor + 5;
+            $scope.request('loadPage');
+        }
+
+
+        // Ordenar por nombre de producto
+        $scope.ordenarPorPrecioProducto = function(){
+            if($scope.orderByPriceProduct == ''){
+                $scope.orderByPriceProduct = "/ordenByPrice";
+            }else{
+                $scope.orderByPriceProduct = '';
+            }
             $scope.request('loadPage');
         }
 
@@ -179,6 +199,22 @@ var app = angular.module('myApp', ['ngRoute'])
             }
         }
 
+        //Solicitudes de compra
+        $scope.pagination.siguienteSolicitud = function () {
+            $scope.siguienteSolicitud = $scope.siguienteSolicitud + 5;
+            $scope.request('loadPage');
+        }
+
+        $scope.pagination.anteriorSolicitud = function () {
+            if( $scope.siguienteSolicitud > 0){
+                $scope.siguienteSolicitud = $scope.siguienteSolicitud - 5;
+                $scope.request('loadPage');
+            }
+        }
+
+        $scope.actualizarPagina = function(){
+            $scope.request('loadPage');
+        }
 
         // Funciones de registro
 
@@ -210,8 +246,8 @@ var app = angular.module('myApp', ['ngRoute'])
         }
 
         $scope.agregarACarritoDeCompra = function(producto,cantidadSolicitada){
-            $http({
-                url: 'http://localhost:8080/lazyprime/rest/comprasDetalles',
+             $http({
+                url: 'http://localhost:8080/lazyprime/rest/compraDetalle',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 data: {product:producto , cantidad:cantidadSolicitada}
@@ -246,26 +282,16 @@ var app = angular.module('myApp', ['ngRoute'])
             })
         }
 
-        $scope.enviarArchivoProducto = function () {
-            $scope.data;
-            var f = document.getElementById('fileProducto').files[0],
-                r = new FileReader();
-            r.onloadend = function(e){
-                $scope.data = e.target.result;
-            }
-            r.readAsBinaryString(f);
-        }
 
-        $scope.comprarProducto = function (producto) {
-            console.log(producto);
-        }
 
-        $scope.compraPedido = function(listaDePedidos){
+
+        $scope.compraPedido = function(listaDePedidos,provider){
+            console.log(provider);
             $http({
                 url: 'http://localhost:8080/lazyprime/rest/compras',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                data: {compraDetalles:listaDePedidos}
+                data: {compraDetalles:listaDePedidos,provider:provider}
             }).success(function(response) {
                 $scope.request('loadPage');
             }).error(function (response) {
@@ -274,7 +300,7 @@ var app = angular.module('myApp', ['ngRoute'])
         }
 
         $scope.ventaPedido = function(listaDePedidos, cliente){
-             $http({
+            $http({
                 url: 'http://localhost:8080/lazyprime/rest/ventas',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -287,12 +313,10 @@ var app = angular.module('myApp', ['ngRoute'])
         }
 
 
-
-
         // Funciones de eliminacion
 
         $scope.eliminarProductoDeListaDeCompras = function (id) {
-            $http.delete("http://localhost:8080/lazyprime/rest/comprasDetalles/" + id).success(function() {
+            $http.delete("http://localhost:8080/lazyprime/rest/compraDetalle/" + id).success(function() {
                 $scope.request('loadPage');
             })
         }
@@ -309,20 +333,97 @@ var app = angular.module('myApp', ['ngRoute'])
             })
         }
 
+        $scope.senFile = function(url){
+
+            var formData = new FormData();
+            formData.append("file",$scope.data);
+
+            $http.post(url, formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+                .success(function( response){
+                    console.log("Success");
+                    $scope.request("loadPage");
+                })
+                .error(function(){
+                    console.log("Error");
+                    $scope.request("loadPage");
+                });
+        }
+
         $scope.enviarArchivoProveedor = function () {
             $scope.data;
             var f = document.getElementById('fileProveedor').files[0],
                 r = new FileReader();
-                r.onloadend = function(e){
-                    $scope.data = e.target.result;
-                }
-                r.readAsBinaryString(f);
-                console.log($scope.data);
+            r.onloadend = function(e){
+                $scope.data = e.target.result;
+            }
+            r.readAsBinaryString(f);
+            console.log($scope.data);
+            $scope.senFile("http://localhost:8080/lazyprime/rest/providers");
 
         }
 
+        $scope.enviarArchivoProducto = function () {
+            $scope.data;
+            var f = document.getElementById('fileProducto').files[0],
+                r = new FileReader();
+            r.onloadend = function(e){
+                $scope.data = e.target.result;
+            }
+            r.readAsBinaryString(f);
+            console.log($scope.data);
+            $scope.senFile("http://localhost:8080/lazyprime/rest/products");
+        }
 
+        $scope.enviarArchivoCompra = function () {
+            $scope.data;
+            var f = document.getElementById('fileCompra').files[0],
+                r = new FileReader();
+            r.onloadend = function(e){
+                $scope.data = e.target.result;
+            }
+            r.readAsBinaryString(f);
+            console.log($scope.data);
+            $scope.senFile("http://localhost:8080/lazyprime/rest/compras");
+        }
 
+        $scope.enviarArchivoVenta = function () {
+            $scope.data;
+            var f = document.getElementById('fileVenta').files[0],
+                r = new FileReader();
+            r.onloadend = function(e){
+                $scope.data = e.target.result;
+            }
+            r.readAsBinaryString(f);
+            console.log($scope.data);
+            $scope.senFile("http://localhost:8080/lazyprime/rest/ventas");
+        }
+
+        $scope.enviarArchivoCliente = function () {
+            $scope.data;
+            var f = document.getElementById('fileCliente').files[0],
+                r = new FileReader();
+            r.onloadend = function(e){
+                $scope.data = e.target.result;
+            }
+            r.readAsBinaryString(f);
+            console.log($scope.data);
+            $scope.senFile("http://localhost:8080/lazyprime/rest/clients");
+        }
+
+        $scope.generarInforme = function(){
+            $http.get("http://localhost:8080/lazyprime/rest/reporte",{responseType:'arraybuffer'})
+                .success(function(response) {
+                    var file = new Blob([response], {type: 'application/pdf'});
+                    var fileURL = URL.createObjectURL(file);
+                    $scope.informePDF = $sce.trustAsResourceUrl(fileURL);
+
+                }).error(function(response){
+                    console.log("Error");
+                })
+        }
 
         //Funciones de listado
 

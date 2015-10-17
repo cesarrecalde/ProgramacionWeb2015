@@ -75,4 +75,8 @@
     <orderEntry type="library" name="Maven: com.sun.faces:jsf-api:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.3" level="project" />
   </component>
+  <component name="sonarModuleSettings">
+    <option name="localAnalysisScripName" value="&lt;PROJECT&gt;" />
+    <option name="serverName" value="&lt;PROJECT&gt;" />
+  </component>
 </module>

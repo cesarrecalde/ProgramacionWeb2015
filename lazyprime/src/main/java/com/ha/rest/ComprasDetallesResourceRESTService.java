@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  * <p/>
  * This class produces a RESTful service to read/write the contents of the members table.
  */
-@Path("/comprasDetalles")
+@Path("/compraDetalle")
 @RequestScoped
 public class ComprasDetallesResourceRESTService {
     @Inject
@@ -57,6 +57,7 @@ public class ComprasDetallesResourceRESTService {
     @Inject
     CompraDetalleRegistration registration;
 
+
     @GET
     @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,6 +65,8 @@ public class ComprasDetallesResourceRESTService {
         // si position es 5 comenzara desde la posicion 5 a traer los elementos
         return repository.findAllOrderedById(position);
     }
+
+
     /**
      * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.
@@ -92,7 +95,7 @@ public class ComprasDetallesResourceRESTService {
 
     @DELETE
     @Path("/{id}")
-    public Response removeCompraDetalle(@PathParam("id")int id) {
+    public Response CompraaDetalle(@PathParam("id")int id) {
         Response.ResponseBuilder builder = null;
 
         try {
@@ -100,6 +103,7 @@ public class ComprasDetallesResourceRESTService {
             builder = Response.ok();
         } catch (Exception e) {
             // Handle generic exceptions
+            log.info(">>>>>>>>>>>>>   "+e.getCause());
             Map<String, String> responseObj = new HashMap<String, String>();
             responseObj.put("error", e.getMessage());
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);

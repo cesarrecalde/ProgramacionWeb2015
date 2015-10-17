@@ -42,6 +42,14 @@ public class ProductRepository {
     }
 
 
+    public List<Product> findAllOrderedByPrice(int position) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Product> criteria = cb.createQuery(Product.class);
+        Root<Product> productRoot = criteria.from(Product.class);
+        criteria.select(productRoot).orderBy(cb.asc(productRoot.get("precioUnitario")));
+        return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+    }
+
     public List<Product> findAllOrderedByName(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> criteria = cb.createQuery(Product.class);
