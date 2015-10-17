@@ -49,8 +49,6 @@ public class Product implements Serializable {
     @Min(0)
      private long cantidad;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Provider product_provider;
 
     @OneToMany(mappedBy = "product")
     private List<VentaDetalle> ventaDetalles;
@@ -89,19 +87,11 @@ public class Product implements Serializable {
     }
 
 
-     public Provider getProduct_provider() {
-        return product_provider;
-    }
 
-    public void setProduct_provider(Provider product_provider_id) {
-        this.product_provider = product_provider_id;
-    }
-
-    public Product(String nameProduct,  long precioUnitario, long cantidad, Provider product_provider) {
+    public Product(String nameProduct,  long precioUnitario, long cantidad ) {
         this.nameProduct = nameProduct;
         this.precioUnitario = precioUnitario;
         this.cantidad = cantidad;
-        this.product_provider = product_provider;
     }
 
     public Product() {

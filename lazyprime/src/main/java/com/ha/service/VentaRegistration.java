@@ -71,12 +71,12 @@ public class VentaRegistration {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void reducirCantidadDeProducto(int cantidad, Product producto) throws Exception{
         Product p = em.find(Product.class, producto.getId());
-        p.setCantidad(p.getCantidad() - cantidad);
 
         if ((p.getCantidad() - cantidad) < 0) {
+            log.info(String.valueOf(p.getCantidad() - cantidad));
             throw new Error("No existen elementos para el producto "+p.getNameProduct());
         }
-
+        p.setCantidad(p.getCantidad() - cantidad);
         em.persist(p);
     }
 }

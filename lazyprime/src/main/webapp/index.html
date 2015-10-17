@@ -184,11 +184,7 @@
                         Nombre del producto: <input ng-model="producto.nameProduct" autofocus><br>
                         Precio unitario del producto: <input ng-model="producto.precioUnitario"><br>
                         Cantidad del producto: <input ng-model="producto.cantidad"><br>
-                        Proveedor:
-                        <select  ng-model="producto.product_provider_id">
-                            <option ng-repeat="proveedor in providers"
-                                    value="{{proveedor}}">{{proveedor.name}}</option>
-                        </select>
+
                         <br>
                         <input ng-click="registrarProducto()" type="submit" value="Registrar">
                     </form>

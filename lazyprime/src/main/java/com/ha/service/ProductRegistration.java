@@ -16,10 +16,8 @@
  */
 package com.ha.service;
 
-import com.google.gson.Gson;
 import com.ha.data.ProductRepository;
 import com.ha.model.Product;
-import com.ha.model.Provider;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -45,17 +43,7 @@ public class ProductRegistration {
     private Event<Product> productEvent;
 
     public void register(Product product) throws Exception{
-        try {
-            Gson gson = new Gson();
-            Provider obj = gson.fromJson(product.getProduct_provider().getName(), Provider.class);
-            product.setProduct_provider(obj);
-            Provider provider = em.find(Provider.class, obj.getId());
-            product.setProduct_provider(provider);
             em.persist(product);
-
             productEvent.fire(product);
-        }catch (Exception e) {
-            throw new Exception(e);
-        }
     }
 }
