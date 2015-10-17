@@ -42,12 +42,19 @@ public class ProductRepository {
     }
 
 
-    public List<Product> findAllOrderedByPrice(int position) {
+    public List<Product> findAllOrderedBy(int position, String mode, String attribute) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Product> criteria = cb.createQuery(Product.class);
         Root<Product> productRoot = criteria.from(Product.class);
-        criteria.select(productRoot).orderBy(cb.asc(productRoot.get("precioUnitario")));
-        return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+
+         if (mode.contains("asc")){
+            criteria.select(productRoot).orderBy(cb.asc(productRoot.get(attribute)));
+        }else if(mode.contains("desc")){
+            criteria.select(productRoot).orderBy(cb.desc(productRoot.get(attribute)));
+        }
+
+        List<Product> p = em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+        return p;
     }
 
     public List<Product> findAllOrderedByName(int position) {

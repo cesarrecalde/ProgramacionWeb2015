@@ -6,10 +6,11 @@ INSERT INTO provider(name) VALUES ('Proveedor 5')
 INSERT INTO provider(name) VALUES ('Proveedor 6')
 INSERT INTO provider(name) VALUES ('Proveedor 7')
 
-INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (3,'Producto 1',3000);
-INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (4,'Producto 2', 12000);
-INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (4,'Producto 3', 12000);
-INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (4,'Producto 4', 12000);
+INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (3,'a Producto 1',3000);
+INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (4,'b Producto 2', 12000);
+INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (4,'c Producto 3', 12000);
+INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (4,'d Producto 4', 12000);
+INSERT INTO product(cantidad, nameproduct, preciounitario) VALUES (4,'f Producto 4', 100);
 
 -- -- INSERT INTO compras_det(cantidad, product_id) VALUES (3, 1)
 -- INSERT INTO compras_det(cantidad, product_id) VALUES (3, 2)

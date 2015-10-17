@@ -14,7 +14,6 @@ var app = angular.module('myApp', ['ngRoute'])
         //Token for Authorization
         $http.defaults.headers.common.Authorization = 'Bearer 096fa935862e4c55db73e8f153ef867f'
         $scope.filter = {};
-        $scope.tables = [];
         $scope.options = [];
         $scope.pagination = [];
         $scope.siguienteProveedor = 0;
@@ -29,7 +28,6 @@ var app = angular.module('myApp', ['ngRoute'])
 
 
         $scope.request = function(caseRequest){
-            $scope.tables = [];
             switch (caseRequest) {
                 case "loadPage":
                     $scope.progress = 0;
@@ -106,11 +104,14 @@ var app = angular.module('myApp', ['ngRoute'])
 
         // Ordenar por nombre de producto
         $scope.ordenarPorPrecioProducto = function(){
+            console.log(">>>>>>>>");
             if($scope.orderByPriceProduct == ''){
                 $scope.orderByPriceProduct = "/ordenByPrice";
             }else{
                 $scope.orderByPriceProduct = '';
             }
+
+            console.log(">>>>>> ".$scope.orderByPriceProduct);
             $scope.request('loadPage');
         }
 
@@ -272,7 +273,7 @@ var app = angular.module('myApp', ['ngRoute'])
                 url: 'http://localhost:8080/lazyprime/rest/products',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                data: {nameProduct: $scope.producto.nameProduct, precioUnitario: $scope.producto.precioUnitario, cantidad:$scope.producto.cantidad, product_provider:$scope.producto.product_provider_id}
+                data: {nameProduct: $scope.producto.nameProduct, precioUnitario: $scope.producto.precioUnitario, cantidad:$scope.producto.cantidad}
             }).success(function() {
                 $scope.producto.precioUnitario = 0;
                 $scope.producto.nameProduct = "";

@@ -37,6 +37,21 @@ public class VentaRepository {
     }
 
 
+    public List<Venta> findAllOrderedBy(int position, String mode, String attribute) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Venta> criteria = cb.createQuery(Venta.class);
+        Root<Venta> ventaRoot = criteria.from(Venta.class);
+
+        if (mode.contains("asc")){
+            criteria.select(ventaRoot).orderBy(cb.asc(ventaRoot.get(attribute)));
+        }else if(mode.contains("desc")){
+            criteria.select(ventaRoot).orderBy(cb.desc(ventaRoot.get(attribute)));
+        }
+
+        List<Venta> p = em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+        return p;
+    }
+
     public List<Venta> findAllOrderedByDate(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Venta> criteria = cb.createQuery(Venta.class);

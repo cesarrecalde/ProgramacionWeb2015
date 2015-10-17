@@ -52,6 +52,12 @@ public class ClientResourceRESTService {
     @Inject
     ClientRegistration registration;
 
+    @GET
+    @Path("/ordenBy/{by_attribute}/{mode}/{position:[0-9][0-9]*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Client> listAllBy(@PathParam("position") int position,@PathParam("mode") String mode, @PathParam("by_attribute") String attribute) {
+        return repository.findAllOrderedBy(position,mode,attribute);
+    }
 
 
     @GET

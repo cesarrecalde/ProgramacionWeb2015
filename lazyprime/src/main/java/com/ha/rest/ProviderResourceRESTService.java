@@ -63,9 +63,16 @@ public class ProviderResourceRESTService {
     @GET
     @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Provider> listAllProviders(@PathParam("position") int position) {
+    public List<Provider> listAll(@PathParam("position") int position) {
         // si position es 5 comenzara desde la posicion 5 a traer los elementos
         return repository.findAllOrderedByName(position);
+    }
+
+    @GET
+    @Path("/ordenBy/{by_attribute}/{mode}/{position:[0-9][0-9]*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Provider> listAllProviderBy(@PathParam("position") int position,@PathParam("mode") String mode, @PathParam("by_attribute") String attribute) {
+        return repository.findAllOrderedBy(position,mode,attribute);
     }
 
 

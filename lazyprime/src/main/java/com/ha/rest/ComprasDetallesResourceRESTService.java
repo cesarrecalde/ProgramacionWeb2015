@@ -59,6 +59,13 @@ public class ComprasDetallesResourceRESTService {
 
 
     @GET
+    @Path("/ordenBy/{by_attribute}/{mode}/{position:[0-9][0-9]*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CompraDetalle> listAllBy(@PathParam("position") int position,@PathParam("mode") String mode, @PathParam("by_attribute") String attribute) {
+        return repository.findAllOrderedBy(position,mode,attribute);
+    }
+
+    @GET
     @Path("/{position:[0-9][0-9]*}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CompraDetalle> listAllCompraDetalles(@PathParam("position") int position) {

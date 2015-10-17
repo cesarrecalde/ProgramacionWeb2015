@@ -37,6 +37,21 @@ public class CompraDetalleRepository {
     }
 
 
+    public List<CompraDetalle> findAllOrderedBy(int position, String mode, String attribute) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<CompraDetalle> criteria = cb.createQuery(CompraDetalle.class);
+        Root<CompraDetalle> compraDetalleRoot = criteria.from(CompraDetalle.class);
+
+        if (mode.contains("asc")){
+            criteria.select(compraDetalleRoot).orderBy(cb.asc(compraDetalleRoot.get(attribute)));
+        }else if(mode.contains("desc")){
+            criteria.select(compraDetalleRoot).orderBy(cb.desc(compraDetalleRoot.get(attribute)));
+        }
+
+        List<CompraDetalle> p = em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+        return p;
+    }
+
     public List<CompraDetalle> findAllOrderedById(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<CompraDetalle> criteria = cb.createQuery(CompraDetalle.class);

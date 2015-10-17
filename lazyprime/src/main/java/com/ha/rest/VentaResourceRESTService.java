@@ -68,6 +68,14 @@ public class VentaResourceRESTService {
         return repository.findAllOrderedByDate(position);
     }
 
+    @GET
+    @Path("/ordenBy/{by_attribute}/{mode}/{position:[0-9][0-9]*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Venta> listAllBy(@PathParam("position") int position,@PathParam("mode") String mode, @PathParam("by_attribute") String attribute) {
+        return repository.findAllOrderedBy(position,mode,attribute);
+    }
+
+
     /**
      * Creates a new member from the values provided. Performs validation, and will return a JAX-RS response with either 200 ok,
      * or with a map of fields, and related errors.

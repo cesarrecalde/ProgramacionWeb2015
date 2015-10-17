@@ -45,6 +45,22 @@ public class ProviderRepository {
         return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
     }
 
+
+    public List<Provider> findAllOrderedBy(int position, String mode, String attribute) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Provider> criteria = cb.createQuery(Provider.class);
+        Root<Provider> providerRoot = criteria.from(Provider.class);
+
+        if (mode.contains("asc")){
+            criteria.select(providerRoot).orderBy(cb.asc(providerRoot.get(attribute)));
+        }else if(mode.contains("desc")){
+            criteria.select(providerRoot).orderBy(cb.desc(providerRoot.get(attribute)));
+        }
+
+        List<Provider> p = em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+        return p;
+    }
+
     public Provider findAllByName(String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Provider> criteria = cb.createQuery(Provider.class);

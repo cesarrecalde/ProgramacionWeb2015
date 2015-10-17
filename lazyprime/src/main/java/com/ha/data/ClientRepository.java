@@ -36,6 +36,20 @@ public class ClientRepository {
         return em.find(Client.class, id);
     }
 
+    public List<Client> findAllOrderedBy(int position, String mode, String attribute) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Client> criteria = cb.createQuery(Client.class);
+        Root<Client> clientRoot = criteria.from(Client.class);
+
+        if (mode.contains("asc")){
+            criteria.select(clientRoot).orderBy(cb.asc(clientRoot.get(attribute)));
+        }else if(mode.contains("desc")){
+            criteria.select(clientRoot).orderBy(cb.desc(clientRoot.get(attribute)));
+        }
+
+        List<Client> p = em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+        return p;
+    }
 
     public List<Client> findAllOrderedByName(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();

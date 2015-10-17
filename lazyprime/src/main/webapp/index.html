@@ -210,17 +210,15 @@
                         <td align="center">Producto</td>
                         <td align="center">Cantidad</td>
                         <td align="center">Precio</td>
-                        <td align="center">Proveedor</td>
                         <td align="center">Cantidad</td>
                         <td align="center">Agregar al carrito de compras</td>
                         <td align="center">Agregar al carrito de ventas</td>
                         </thead>
-                        <tr ng-repeat="producto in products | orderBy:'id' ">
+                        <tr ng-repeat="producto in products ">
                             <td align="center">{{ producto.id }}</td>
                             <td align="center">{{ producto.nameProduct }}</td>
                             <td align="center">{{ producto.cantidad }}</td>
                             <td align="center">{{ producto.precioUnitario | currency:"Gs ":000 }}</td>
-                            <td align="center">{{ producto.product_provider.name }}</td>
                             <td align="center"><input  ng-init="cantidadSolicitada = 0" ng-model="cantidadSolicitada" type="number" min="0"></td>
                             <td align="center"><button ng-click="agregarACarritoDeCompra(producto,cantidadSolicitada)" class="glyphicon glyphicon-shopping-cart" ng-hide="cantidadSolicitada == 0" aria-hidden="true"> </td>
                             <td align="center">
