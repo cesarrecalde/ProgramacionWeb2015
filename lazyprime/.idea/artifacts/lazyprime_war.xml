@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="lazyprime:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="lazyprime.war">
-      <element id="artifact" artifact-name="lazyprime:war exploded" />
-    </root>
-  </artifact>
-</component>
