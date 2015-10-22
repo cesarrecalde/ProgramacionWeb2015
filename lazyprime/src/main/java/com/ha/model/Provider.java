@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 
 @Entity
@@ -40,6 +41,8 @@ public class Provider implements Serializable {
     @Size(min = 1, max = 25)
     private String name;
 
+    @OneToMany(mappedBy = "provider")
+    private List<Compra> compras;
 
     public long getId() {
         return id;

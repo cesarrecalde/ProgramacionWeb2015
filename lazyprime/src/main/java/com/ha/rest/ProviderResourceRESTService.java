@@ -18,8 +18,13 @@ package com.ha.rest;
 
 import com.ha.data.ProviderRepository;
 import com.ha.model.Provider;
+import com.ha.service.ProviderMassiveRegistration;
 import com.ha.service.ProviderRegistration;
 import com.ha.service.ProviderRemove;
+import com.ha.util.CSVFileReadingException;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -30,6 +35,7 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -55,10 +61,12 @@ public class ProviderResourceRESTService {
 
     @Inject
     ProviderRegistration registration;
+
     @Inject
     ProviderRemove providerRemove;
 
-
+    @Inject
+    private ProviderMassiveRegistration massiveRegistration;
 
     @GET
     @Path("/{position:[0-9][0-9]*}")
@@ -154,5 +162,53 @@ public class ProviderResourceRESTService {
         return Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
     }
 
+    @POST
+    @Consumes("multipart/form-data")
+    @Produces("application/json")
+    public Response uploadFile(@MultipartForm  MultipartFormDataInput input) {
+
+        String fileName = "/home/cesar/Escritorio/proveedores.csv";
+
+        Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+        List<InputPart> inputParts = uploadForm.get("file");
+
+        for (InputPart inputPart : inputParts) {
+
+            try {
+
+                //convert the uploaded file to inputstream
+                InputStream inputStream = inputPart.getBody(InputStream.class,null);
+
+
+                OutputStream out = new FileOutputStream( new File(fileName) );
+                int read;
+                byte[] bytes = new byte[1024];
+
+                while ( (read = inputStream.read(bytes) ) != -1) {
+                    out.write(bytes, 0, read);
+                }
+
+                out.close();
+
+            } catch (IOException e) {
+                return Response.serverError().entity("Error : " + e.getMessage()).build();
+            }
+
+            try {
+                FileReader fr = new FileReader( fileName );
+                massiveRegistration.massiveRegistration( fr );
+                fr.close();
+            }catch (CSVFileReadingException e){
+                return Response.status(400).entity("Archivo mal construido : \n" + e.getMessage()).build();
+
+            }catch(Exception e){
+                return Response.serverError().entity("Error : " + e.getMessage()).build();
+            }
+        }
+
+        return Response.status(200).build();
+
+
+    }
 
 }

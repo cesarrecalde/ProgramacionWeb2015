@@ -21,112 +21,114 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/WEB-INF/templates/default.xhtml">
 
-    <ui:define name="listaProveedores">
+    <html>
+        <head>
+            <!--<meta http-equiv="Refresh" content="0; URL=index.jsf"> -->
+            <title>Web 2015</title>
+            <link rel="stylesheet" href="resources/css/bootstrap-theme.min.css"></link>
+            <link rel="stylesheet" href="resources/css/bootstrap.min.css"></link>
+            <script src="resources/js/jquery.min.js"></script>
+            <script src="resources/js/bootstrap.min.js"></script>
 
-        <h2>Registro de proveedor</h2>
-        <h:form id="regProvider" styleClass="form-inline">
-                <h:outputLabel for="name5" value="Nombre del proveedor:"/>
-                <h:inputText id="name5" value="#{newProvider.name}" onfocus="true"/>
-                <h:message for="name5" errorClass="invalid"/>
-                <h:commandButton id="register4" action="#{providerController.register}" value="Registrar Proveedor" styleClass="btn btn-default"/>
-        </h:form>
+        </head>
 
+        <body>
 
+            <div id="container">
+                <div id="content"  >
+                    <nav class="navbar navbar-default navbar-static-top">
+                        <div class="container">
+                            <ul class="nav nav-tabs">
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Proveedores<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-toggle="tab" href="#proveedores">Registro de proveedor</a></li>
+                                        <li><a data-toggle="tab" href="#lista_proveedores">Lista de proveedores</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Clientes <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-toggle="tab" href="#clientes">Registro de clientes</a></li>
+                                        <li><a data-toggle="tab" href="#lista_clientes">Listado de clientes</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Productos <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-toggle="tab" href="#producto">Registrar Producto</a></li>
+                                        <li><a data-toggle="tab" href="#lista_productos">Lista de Productos</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Carrito de productos <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-toggle="tab" href="#pedidos_compra">Pedidos de compra</a></li>
+                                        <li><a data-toggle="tab" href="#pedidos_ventas">Pedido de venta</a></li>
+                                    </ul>
+                                </li>
 
-        <h2>Lista de proveedores</h2>
-        <h:panelGroup rendered="#{empty providers}">
-            <em>Sin proveedores registrados.</em>
-        </h:panelGroup>
-
-        <h:dataTable var="proveedor" value="#{providers}" rendered="#{not empty providers}" styleClass="table table-hover">
-            <h:column>
-                <f:facet name="header">Id</f:facet>
-                #{proveedor.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Nombre</f:facet>
-                #{proveedor.name}
-            </h:column>
-            <h:column>
-                <h:panelGrid columns="2">
-                    <h:form>
-                        <h:commandButton  action="#{providerController.remove(proveedor.id)}" value="Eliminar" styleClass="btn btn-default"/>
-                    </h:form>
-                </h:panelGrid>
-            </h:column>
-        </h:dataTable>
-    </ui:define>
-
-
-    <ui:define name="content">
-
-        <h:form id="regProduct" styleClass="form-group">
-            <h2>Registro del producto</h2>
-            <h:panelGrid columns="3" columnClasses="titleCell">
-                <h:outputLabel for="name3" value="Nombre del producto:"/>
-                <h:inputText id="name3" value="#{newProduct.nameProduct}" onfocus="true"/>
-                <h:message for="name3" errorClass="invalid"/>
-
-                <h:outputLabel for="precioUnitario" value="Precio unitario:"/>
-                <h:inputText id="precioUnitario" value="#{newProduct.precioUnitario}" />
-                <h:message for="precioUnitario" errorClass="invalid"/>
-
-                <h:outputLabel for="cantidad" value="Cantidad disponible:"/>
-                <h:inputText id="cantidad" value="#{newProduct.cantidad}" />
-                <h:message for="cantidad" errorClass="invalid"/>
-
-                <h:outputLabel for="proveedorProducto" value="Nombre del proveedor:"/>
-                <h:inputText id="proveedorProducto" value="#{newProviderProduct.name}" />
-                <h:message for="proveedorProducto" errorClass="invalid"/>
+                                <li role="presentation"><a data-toggle="tab" href="#compras">Compras Realizadas</a></li>
+                                <li role="presentation"><a data-toggle="tab" href="#ventas">Ventas Realizadas</a></li>
+                                <li role="presentation"><a href="#">Facturas</a></li>
+                            </ul>
+                        </div>
+                    </nav>
 
 
-            </h:panelGrid>
+                    <div class="tab-content">
 
-            <p>
-                <h:panelGrid columns="2">
-                    <h:commandButton id="register3" action="#{productController.register}" value="Registrar" styleClass="btn btn-default"/>
-                </h:panelGrid>
-            </p>
-        </h:form>
+                        <div class="row tab-pane fade in active" id="proveedores">
 
-        <h2>Lista de Productos</h2>
-        <h:panelGroup rendered="#{empty products}">
-            <em>No se registraron productos.</em>
-        </h:panelGroup>
-        <h:dataTable var="producto" value="#{products}" rendered="#{not empty products}" styleClass="table table-hover">
-            <h:column>
-                <f:facet name="header">Id</f:facet>
-                #{producto.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Nombre</f:facet>
-                #{producto.nameProduct}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Proveedor</f:facet>
-                #{producto.product_provider.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Cantidad de unidades</f:facet>
-                #{producto.cantidad}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Costo Unitario</f:facet>
-                #{producto.precioUnitario}
-            </h:column>
-            <h:column>
-                <h:form>
-                    <h:commandButton  action="#{compraController.agregarACarrito(producto)}" value="Agregar a carrito de compra" styleClass="btn btn-default"/>
-                </h:form>
-            </h:column>
-        </h:dataTable>
+                        </div>
+
+                        <div class="row tab-pane fade" id="lista_proveedores">
+
+                        </div>
 
 
-        <p>REST URL for all compras: <a href="#{request.contextPath}/rest/compras">/rest/compras</a></p>
-        <p>REST URL for all productos: <a href="#{request.contextPath}/rest/products">/rest/products</a></p>
-        <p>REST URL for all proveedores: <a href="#{request.contextPath}/rest/providers">/rest/providers</a></p>
-    </ui:define>
+                        <div class="row tab-pane fade" id="clientes">
+
+                        </div>
+
+                        <div class="row tab-pane fade" id="lista_clientes">
+
+                        </div>
 
 
+                        <div class="row tab-pane fade" id="producto">
+
+                        </div>
+
+
+                        <div class="row tab-pane fade" id="lista_productos">
+
+                        </div>
+
+
+                        <div class="row tab-pane fade" id="pedidos_compra">
+
+                        </div>
+
+
+                        <div class="row tab-pane fade" id="pedidos_ventas">
+
+                        </div>
+
+
+                        <div class="row tab-pane fade" id="compras">
+
+                        </div>
+
+
+                        <div class="row tab-pane fade" id="ventas">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>
 
 </ui:composition>

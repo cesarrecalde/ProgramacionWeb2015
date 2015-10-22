@@ -64,4 +64,8 @@ public class ProductRepository {
         criteria.select(productRoot).orderBy(cb.asc(productRoot.get("nameProduct")));
          return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
     }
+
+    public List<Product> findLowStockProducts(){
+        return em.createNativeQuery("SELECT * FROM product p WHERE p.cantidad<=10",Product.class).getResultList();
+    }
 }

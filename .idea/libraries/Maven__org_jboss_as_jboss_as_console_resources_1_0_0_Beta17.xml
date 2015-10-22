@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.jboss.as:jboss-as-console:resources:1.0.0.Beta17">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/as/jboss-as-console/1.0.0.Beta17/jboss-as-console-1.0.0.Beta17-resources.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/as/jboss-as-console/1.0.0.Beta17/jboss-as-console-1.0.0.Beta17-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/as/jboss-as-console/1.0.0.Beta17/jboss-as-console-1.0.0.Beta17-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
