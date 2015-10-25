@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form enctype="multipart/form-data">
+        <p:fileUpload value="#{productController}"
+                      mode="simple"
+                      allowTypes="*.csv"
+                      uploadLabel="upload"
+                      skinSimple="true"/>
+        <p:commandButton value="Guardar"
+                         actionListener="#{productController.massiveRegistration}"
+                         ajax="false"
+                         disabled="true"/>
+    </h:form>
+
+</ui:composition>

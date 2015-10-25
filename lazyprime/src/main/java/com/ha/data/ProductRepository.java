@@ -17,6 +17,11 @@
 package com.ha.data;
 
 import com.ha.model.Product;
+import com.ha.service.ProductMassiveRegistration;
+import com.ha.util.CSVFileReadingException;
+import org.primefaces.component.fileupload.FileUpload;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
@@ -25,6 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.*;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -72,4 +78,6 @@ public class ProductRepository {
     public void register(Product p){
         this.em.persist( p );
     }
+
+
 }

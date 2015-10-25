@@ -42,7 +42,6 @@ public class ProductMassiveRegistration {
     @Inject
     private Event<Product> productEvent;
 
-
     @Inject
     private ProviderRepository providerRepository;
 

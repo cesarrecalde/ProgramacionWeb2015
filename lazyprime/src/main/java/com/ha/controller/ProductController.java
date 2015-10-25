@@ -2,6 +2,11 @@ package com.ha.controller;
 
 import com.ha.data.ProductRepository;
 import com.ha.model.Product;
+import com.ha.service.ProductMassiveRegistration;
+import com.ha.util.CSVFileReadingException;
+import org.primefaces.component.fileupload.FileUpload;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -9,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.persistence.PersistenceContext;
+import java.io.*;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -23,17 +29,24 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @Inject
+    private ProductMassiveRegistration productMassiveRegistration;
+
+    @Inject
     private Logger log;
 
     private List<Product> productList;
 
-    private static final String prueba = "asfkdgjadgfsdavahfjscgahfsdgjXGc";
+    private UploadedFile file;
+
+    private Product newProduct;
+
+    private String errorMessage;
 
     private Integer page;
 
     private String order;
 
-    private Product newProduct;
+
 
     @PostConstruct
     private void init(){
@@ -41,6 +54,7 @@ public class ProductController {
         this.order = "asc";
         this.newProduct = new Product();
         this.productList = productRepository.findAllOrderedByName( page );
+        this.file = null;
     }
 
     public List<Product> getProductList(){
@@ -60,5 +74,37 @@ public class ProductController {
     public void registerProduct(){
         this.productRepository.register( this.newProduct );
         this.newProduct = new Product();
+    }
+
+    public void massiveRegistration(FileUploadEvent event) throws CSVFileReadingException,IOException {
+        this.errorMessage = "";
+        String fileName = this.file.getFileName();
+
+        System.out.println( fileName );
+        String filePath = "/home/cesar/Escritorio/" + fileName;
+
+        File archivoGuardado = new File( filePath );
+
+        InputStream in = this.file.getInputstream();
+        OutputStream out = new FileOutputStream( archivoGuardado );
+
+        int read = 0;
+        byte[] bytes = new byte[1024];
+
+        while ((read = in.read(bytes)) != -1) {
+            out.write(bytes, 0, read);
+        }
+
+        in.close();
+        out.close();
+
+        FileReader fr = new FileReader( archivoGuardado );
+
+        try {
+            productMassiveRegistration.massiveRegistration( fr );
+        } catch (CSVFileReadingException e) {
+            this.errorMessage = e.getMessage();
+            throw e;
+        }
     }
 }

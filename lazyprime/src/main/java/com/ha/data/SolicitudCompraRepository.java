@@ -2,7 +2,7 @@ package com.ha.data;
 
 import com.ha.model.Product;
 import com.ha.model.SolicitudCompra;
-
+import com.ha.model.SolicitudCompra_;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -36,7 +36,7 @@ public class SolicitudCompraRepository {
     }
 
     public boolean existSolicitudForProduct( Product p){
-/*
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SolicitudCompra> criteria = cb.createQuery(SolicitudCompra.class);
         Root<SolicitudCompra> solicitudCompraRoot = criteria.from(SolicitudCompra.class);
@@ -51,7 +51,6 @@ public class SolicitudCompraRepository {
         }else{
             return true;
         }
-*/
-        return true;
+
     }
 }
