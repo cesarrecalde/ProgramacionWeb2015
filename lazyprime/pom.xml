@@ -45,31 +45,42 @@
             <type>pom</type>
             <scope>import</scope>
          </dependency>
-         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <version>2.2.1.GA</version>
-         </dependency>
-         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
-            <version>2.2.1.GA</version>
-         </dependency>
-         <dependency>
-            <groupId>javax.faces</groupId>
-            <artifactId>javax.faces-api</artifactId>
-            <version>2.1</version>
-         </dependency>
-         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>1.7.1</version>
-         </dependency>
+
 
       </dependencies>
    </dependencyManagement>
 
    <dependencies>
+
+      <dependency>
+         <groupId>javax.faces</groupId>
+         <artifactId>jsf-api</artifactId>
+         <version>2.1</version>
+      </dependency>
+
+      <dependency>
+         <groupId>javax.faces</groupId>
+         <artifactId>jsf-impl</artifactId>
+         <version>1.2_15</version>
+      </dependency>
+
+      <dependency>
+         <groupId>javax.faces</groupId>
+         <artifactId>javax.faces-api</artifactId>
+         <version>2.2</version>
+      </dependency>
+
+      <dependency>
+         <groupId>com.google.code.gson</groupId>
+         <artifactId>gson</artifactId>
+         <version>2.3</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.primefaces</groupId>
+         <artifactId>primefaces</artifactId>
+         <version>5.3</version>
+      </dependency>
 
       <dependency>
          <groupId>org.jboss.resteasy</groupId>
@@ -90,6 +101,18 @@
          <artifactId>resteasy-multipart-provider</artifactId>
          <version>2.2.0.GA</version>
          <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>javax.servlet-api</artifactId>
+         <version>3.1.0</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.primefaces.extensions</groupId>
+         <artifactId>all-themes</artifactId>
+         <version>1.0.8</version>
       </dependency>
 
       <!-- First declare the APIs we depend on and need for compilation. 
@@ -184,11 +207,7 @@
          <artifactId>jsf-api</artifactId>
          <version>2.2.4</version>
       </dependency>
-      <dependency>
-         <groupId>com.google.code.gson</groupId>
-         <artifactId>gson</artifactId>
-         <version>2.3</version>
-      </dependency>
+
 
    </dependencies>
 

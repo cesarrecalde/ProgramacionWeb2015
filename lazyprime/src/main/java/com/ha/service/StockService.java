@@ -30,8 +30,7 @@ public class StockService {
     @Inject
     private SolicitudCompraRepository solicitudCompraRepository;
 
-
-    @Schedule(minute = "*/3",hour = "*")
+    @Schedule(minute = "*/3",hour = "*", persistent = false)
     public void something(){
 
         System.out.println("************************************");

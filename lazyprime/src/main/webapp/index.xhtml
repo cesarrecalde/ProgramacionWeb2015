@@ -1,133 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-    JBoss, Home of Professional Open Source
-    Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
-    contributors by the @authors tag. See the copyright.txt in the
-    distribution for a full listing of individual contributors.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
--->
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                template="/WEB-INF/templates/default.xhtml">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="tenplate.xhtml">
 
-    <html>
-        <head>
-            <!--<meta http-equiv="Refresh" content="0; URL=index.jsf"> -->
-            <title>Web 2015</title>
-            <link rel="stylesheet" href="resources/css/bootstrap-theme.min.css"></link>
-            <link rel="stylesheet" href="resources/css/bootstrap.min.css"></link>
-            <script src="resources/js/jquery.min.js"></script>
-            <script src="resources/js/bootstrap.min.js"></script>
+    <ui:define name="title">
+        <h:outputText value="Pagina inicio"/>
+    </ui:define>
 
-        </head>
-
-        <body>
-
-            <div id="container">
-                <div id="content"  >
-                    <nav class="navbar navbar-default navbar-static-top">
-                        <div class="container">
-                            <ul class="nav nav-tabs">
-                                <li class="dropdown">
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Proveedores<b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a data-toggle="tab" href="#proveedores">Registro de proveedor</a></li>
-                                        <li><a data-toggle="tab" href="#lista_proveedores">Lista de proveedores</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Clientes <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a data-toggle="tab" href="#clientes">Registro de clientes</a></li>
-                                        <li><a data-toggle="tab" href="#lista_clientes">Listado de clientes</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Productos <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a data-toggle="tab" href="#producto">Registrar Producto</a></li>
-                                        <li><a data-toggle="tab" href="#lista_productos">Lista de Productos</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Carrito de productos <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a data-toggle="tab" href="#pedidos_compra">Pedidos de compra</a></li>
-                                        <li><a data-toggle="tab" href="#pedidos_ventas">Pedido de venta</a></li>
-                                    </ul>
-                                </li>
-
-                                <li role="presentation"><a data-toggle="tab" href="#compras">Compras Realizadas</a></li>
-                                <li role="presentation"><a data-toggle="tab" href="#ventas">Ventas Realizadas</a></li>
-                                <li role="presentation"><a href="#">Facturas</a></li>
-                            </ul>
-                        </div>
-                    </nav>
-
-                    <div class="tab-content">
-
-                        <div class="row tab-pane fade in active" id="proveedores">
-
-                        </div>
-
-                        <div class="row tab-pane fade" id="lista_proveedores">
-
-                        </div>
-
-
-                        <div class="row tab-pane fade" id="clientes">
-
-                        </div>
-
-                        <div class="row tab-pane fade" id="lista_clientes">
-
-                        </div>
-
-
-                        <div class="row tab-pane fade" id="producto">
-
-                        </div>
-
-
-                        <div class="row tab-pane fade" id="lista_productos">
-
-                        </div>
-
-
-                        <div class="row tab-pane fade" id="pedidos_compra">
-
-                        </div>
-
-
-                        <div class="row tab-pane fade" id="pedidos_ventas">
-
-                        </div>
-
-
-                        <div class="row tab-pane fade" id="compras">
-
-                        </div>
-
-
-                        <div class="row tab-pane fade" id="ventas">
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </body>
-    </html>
-
+    <ui:define name="contetnt">
+        <h:outputText value="Bienvenido"/>
+    </ui:define>
 </ui:composition>

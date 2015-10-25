@@ -18,6 +18,7 @@ package com.ha.data;
 
 import com.ha.model.Product;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -27,8 +28,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.logging.Logger;
 
-
-@ApplicationScoped
+@Stateless
 public class ProductRepository {
 
     @Inject
@@ -67,5 +67,9 @@ public class ProductRepository {
 
     public List<Product> findLowStockProducts(){
         return em.createNativeQuery("SELECT * FROM product p WHERE p.cantidad<=10",Product.class).getResultList();
+    }
+
+    public void register(Product p){
+        this.em.persist( p );
     }
 }
