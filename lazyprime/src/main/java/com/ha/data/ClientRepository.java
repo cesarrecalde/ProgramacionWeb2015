@@ -18,6 +18,7 @@ package com.ha.data;
 
 import com.ha.model.Client;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@ApplicationScoped
+@Stateless
 public class ClientRepository {
 
     @Inject
@@ -57,5 +58,9 @@ public class ClientRepository {
         Root<Client> client = criteria.from(Client.class);
         criteria.select(client).orderBy(cb.asc(client.get("name")));
         return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+    }
+
+    public void register(Client c){
+        this.em.persist( c );
     }
 }

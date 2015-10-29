@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="tenplate.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="Listado de Clientes"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:dataTable var="cliente" value="#{clienteController.model}" paginator="true" rows="5"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         selectionMode="single" id="clienteTable" lazy="true">
+                <p:column headerText="Id" sortBy="#{cliente.id}" filterBy="#{cliente.id}">
+                    <h:outputText value="#{cliente.id}" />
+                </p:column>
+                <p:column headerText="Nombre" sortBy="#{cliente.name}" filterBy="#{cliente.name}">
+                    <h:outputText value="#{cliente.name}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

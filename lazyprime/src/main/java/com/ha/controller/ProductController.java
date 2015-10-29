@@ -1,7 +1,9 @@
 package com.ha.controller;
 
 import com.ha.data.ProductRepository;
+import com.ha.model.LazyProducto;
 import com.ha.model.Product;
+import org.primefaces.model.LazyDataModel;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -9,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -17,7 +20,7 @@ import java.util.logging.Logger;
  */
 @ViewScoped
 @ManagedBean(name="productController")
-public class ProductController {
+public class ProductController implements Serializable {
 
     @Inject
     private ProductRepository productRepository;
@@ -35,13 +38,24 @@ public class ProductController {
 
     private Product newProduct;
 
+    private LazyDataModel<Product> model;
+
     @PostConstruct
     private void init(){
         this.page = 0;
         this.order = "asc";
         this.newProduct = new Product();
-        this.productList = productRepository.findAllOrderedByName( page );
+        model = new LazyProducto(productRepository.findAllOrderedByName(0));
     }
+
+    public LazyDataModel<Product> getModel() {
+        return model;
+    }
+
+    public void setModel(LazyDataModel<Product> model) {
+        this.model = model;
+    }
+
 
     public List<Product> getProductList(){
         return this.productList;

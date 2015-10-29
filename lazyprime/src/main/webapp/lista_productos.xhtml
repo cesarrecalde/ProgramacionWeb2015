@@ -9,21 +9,25 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form>
-            <p:dataTable var="producto" value="#{productController.productList}" lazy="true">
-                <p:column headerText="Id">
+        <h:form id="form">
+            <p:dataTable var="producto" value="#{productController.model}" paginator="true" rows="5"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         selectionMode="single" id="productTable" lazy="true">
+                <p:column headerText="Id" sortBy="#{producto.id}" filterBy="#{producto.id}">
                     <h:outputText value="#{producto.id}" />
                 </p:column>
-                <p:column headerText="Nombre">
-                    <h:outputText value="#{producto.nameProduct}" />
-                </p:column>
-                <p:column headerText="Precio Unitario">
-                    <h:outputText value="#{producto.precioUnitario}" />
-                </p:column>
-                <p:column headerText="Stock">
+                <p:column headerText="Cantidad" sortBy="#{producto.cantidad}" filterBy="#{producto.cantidad}">
                     <h:outputText value="#{producto.cantidad}" />
                 </p:column>
+                <p:column headerText="Nombre" sortBy="#{producto.nameProduct}" filterBy="#{producto.nameProduct}">
+                    <h:outputText value="#{producto.nameProduct}" />
+                </p:column>
+                <p:column headerText="Precio Unitario" sortBy="#{producto.precioUnitario}" filterBy="#{producto.precioUnitario}">
+                    <h:outputText value="#{producto.precioUnitario}" />
+                </p:column>
             </p:dataTable>
+
+
         </h:form>
     </ui:define>
 

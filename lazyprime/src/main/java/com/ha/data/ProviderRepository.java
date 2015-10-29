@@ -18,6 +18,11 @@ package com.ha.data;
 
 import com.ha.model.Provider;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -25,12 +30,17 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import org.primefaces.model.SortOrder;
+import java.util.Map;
 
-@ApplicationScoped
+
+@Stateless
 public class ProviderRepository {
 
     @Inject
     private EntityManager em;
+
+    private List<Provider> providers;
 
     public Provider findById(Long id) {
         return em.find(Provider.class, id);
@@ -68,4 +78,10 @@ public class ProviderRepository {
         criteria.select(providerRoot).where(em.getCriteriaBuilder().equal(providerRoot.get("name"),name));
         return em.createQuery(criteria).getSingleResult();
     }
+
+    public void register(Provider p){
+
+        this.em.persist( p );
+    }
+
 }
