@@ -18,6 +18,7 @@ package com.ha.data;
 
 import com.ha.model.CompraDetalle;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@ApplicationScoped
+@Stateless
 public class CompraDetalleRepository {
 
     @Inject
@@ -58,5 +59,9 @@ public class CompraDetalleRepository {
         Root<CompraDetalle> compraDetalleRoot = criteria.from(CompraDetalle.class);
         criteria.select(compraDetalleRoot).where(cb.isNull(compraDetalleRoot.get("compra"))).orderBy(cb.asc(compraDetalleRoot.get("id")));
         return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+    }
+
+    public void register(CompraDetalle compraDetalle){
+        this.em.persist( compraDetalle);
     }
 }

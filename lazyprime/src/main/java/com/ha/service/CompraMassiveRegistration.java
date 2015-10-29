@@ -69,6 +69,7 @@ public class CompraMassiveRegistration {
                 System.out.println(l);
                 try {
                     Compra c = parseCompra(l);
+
                     registerCompra(c);
 
                 } catch (IncorrectFieldException e) {
@@ -130,20 +131,17 @@ public class CompraMassiveRegistration {
         }
 
         try {
-            Provider provider = providerRepository.findById( Long.parseLong(line[1]) );
+
+            Provider provider = providerRepository.findById( Long.parseLong( line[1]) );
             compra.setProvider( provider );
         } catch (Exception e) {
             throw new ProviderNotFoundException("Proveedor no encontrado");
         }
 
         ArrayList<CompraDetalle> detallesList = null;
-        try {
-            detallesList = parseDetalles( line[2] );
-        } catch (ProductNotFoundException e) {
-            throw e;
-        } catch (IncorrectFieldException e) {
-            throw e;
-        }
+
+        detallesList = parseDetalles( line[2] );
+
 
         compra.setCompraDetalles( detallesList );
 
@@ -175,7 +173,6 @@ public class CompraMassiveRegistration {
                 throw new ProductNotFoundException("Producto con id: " + productId + "no encontrado");
             }
 
-
             CompraDetalle det = new CompraDetalle();
             det.setCantidad( cantidad );
             det.setProduct( product );
@@ -185,7 +182,7 @@ public class CompraMassiveRegistration {
         }
 
         if( lista.isEmpty() ){
-            throw  new IncorrectFieldException("La lista de detalles no piede estar vacia");
+            throw  new IncorrectFieldException("La lista de detalles no puede estar vacia");
         }
         else {
             return lista;
@@ -196,7 +193,8 @@ public class CompraMassiveRegistration {
 
         for( CompraDetalle detalle : compra.getCompraDetalles() ){
            try {
-               validateCompraDetalle( detalle );
+               detalle.setCompra( compra );
+               validateCompraDetalle(detalle);
                em.persist( detalle );
 
                Product product = detalle.getProduct();
@@ -210,14 +208,17 @@ public class CompraMassiveRegistration {
            }
 
         }
+
         try {
             validateCompra( compra );
-            em.persist(compra);
+            em.persist( compra );
+
         }catch ( ConstraintViolationException e){
             throw e;
         }catch (Exception e){
             throw new Exception(e);
         }
+
 
     }
 

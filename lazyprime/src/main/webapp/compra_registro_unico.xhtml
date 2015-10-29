@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form>
+        <p:panel id="proyectLabel" header="Agregar Producto">
+            <p:messages id="messages" />
+            <h:panelGrid columns="3">
+
+                <h:outputLabel for="fecha" value="Fecha:"/>
+                <p:calendar id="fecha" value="#{compraController.newCompra.fecha}" pattern="MM/dd/yyyy HH:mm:ss" />                <p:message for="fecha" display="icon" />
+
+                <h:outputLabel for="providerId" value="Proveedor: "/>
+                <p:inputText id="providerId" value="#{compraController.newProviderId}" label="Proveedor" required="true"/>
+                <p:message for="providerId" display="icon" />
+
+                <ui:repeat var="productId" value="#{compraController.productIds}" varStatus="status">
+                    <h:inputText value="#{compraController.productIds[status.index]}" />
+                    <h:inputText value="#{compraController.productNum[status.index]}" />
+                </ui:repeat>
+
+                <h:inputText value="#{compraController.newId}" />
+                <h:inputText value="#{compraController.newNum}" />
+
+                <p:commandButton ajax="false" value="Agregar Producto" icon="ui-icon-disk" action="#{compraController.addProduct}"/>
+                <p:commandButton ajax="false" value="Remover Producto" icon="ui-icon-disk" action="#{compraController.removeProduct}"/>
+
+                <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{compraController.registerCompra}" />
+            </h:panelGrid>
+        </p:panel>
+    </h:form>
+</ui:composition>

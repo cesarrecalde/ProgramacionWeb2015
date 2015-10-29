@@ -1,0 +1,43 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="Listado de Compras"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:dataTable var="compra" value="#{compraController.compraList}" lazy="true">
+                <p:column headerText="Id">
+                    <h:outputText value="#{compra.id}" />
+                </p:column>
+                <p:column headerText="Fecha">
+                    <h:outputText value="#{compra.fecha}" />
+                </p:column>
+                <p:column headerText="Proveedor">
+                    <h:outputText value="#{compra.provider.name}" />
+                </p:column>
+
+                <p:column headerText="Detalles">
+                    <p:dataTable value="#{compra.compraDetalles}" var="detalle">
+                        <p:column headerText="Producto">
+                            <h:outputText value="#{detalle.product.nameProduct}" />
+                        </p:column>
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{detalle.cantidad}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:column>
+
+
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

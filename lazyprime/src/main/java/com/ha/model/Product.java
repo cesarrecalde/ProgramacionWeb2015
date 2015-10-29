@@ -44,11 +44,11 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "product")
     private List<CompraDetalle> compraDetalle;
 
-     private long precioUnitario;
+    @Min(0)
+    private long precioUnitario;
 
     @Min(0)
-     private long cantidad;
-
+    private long cantidad;
 
     @OneToMany(mappedBy = "product")
     private List<VentaDetalle> ventaDetalles;

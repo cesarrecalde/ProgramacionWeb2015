@@ -18,6 +18,7 @@ package com.ha.data;
 
 import com.ha.model.Compra;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@ApplicationScoped
+@Stateless
 public class ComprasRepository {
 
     @Inject
@@ -51,6 +52,13 @@ public class ComprasRepository {
         List<Compra> p = em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
         return p;
     }
+    public List<Compra> findAllOrderedById() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Compra> criteria = cb.createQuery(Compra.class);
+        Root<Compra> compraRoot = criteria.from(Compra.class);
+        criteria.select(compraRoot).orderBy(cb.asc(compraRoot.get("id")));
+        return em.createQuery(criteria).getResultList();
+    }
 
     public List<Compra> findAllOrderedByDate(int position) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -58,5 +66,11 @@ public class ComprasRepository {
         Root<Compra> compraRoot = criteria.from(Compra.class);
         criteria.select(compraRoot).orderBy(cb.asc(compraRoot.get("fecha")));
         return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+    }
+
+
+
+    public void register( Compra c){
+        this.em.persist( c );
     }
 }
