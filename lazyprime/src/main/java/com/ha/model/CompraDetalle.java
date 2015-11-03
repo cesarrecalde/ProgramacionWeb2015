@@ -27,6 +27,7 @@ public class CompraDetalle {
     @ManyToOne
     private Product product;
 
+    private String nameProduct;
 
     public CompraDetalle() {
     }
@@ -34,12 +35,14 @@ public class CompraDetalle {
     public CompraDetalle(int cantidad, Product product) {
         this.cantidad = cantidad;
         this.product = product;
+        this.nameProduct = product.getNameProduct();
     }
 
     public CompraDetalle(Compra compra, int cantidad, Product product) {
         this.compra = compra;
         this.cantidad = cantidad;
         this.product = product;
+        this.nameProduct = product.getNameProduct();
     }
 
     public long getId() {
@@ -68,5 +71,13 @@ public class CompraDetalle {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getNameProduct() {
+        return nameProduct;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
     }
 }

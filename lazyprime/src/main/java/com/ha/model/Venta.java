@@ -22,7 +22,7 @@ public class Venta {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    @OneToMany(mappedBy = "venta")
+    @OneToMany(mappedBy = "venta", fetch = FetchType.EAGER)
     private List<VentaDetalle> ventaDetalles;
 
     @ManyToOne

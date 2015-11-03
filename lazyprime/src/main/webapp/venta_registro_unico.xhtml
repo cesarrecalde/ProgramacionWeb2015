@@ -5,18 +5,18 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <h:form>
-        <p:panel id="proyectLabel" header="Registrar Compra">
+        <p:panel id="proyectLabel" header="Registrar Venta">
 
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
             <h:panelGrid columns="3">
 
                 <h:outputLabel for="fecha" value="Fecha:"/>
-                <p:calendar id="fecha" value="#{compraRC.newCompra.fecha}" pattern="MM/dd/yyyy HH:mm:ss" />
+                <p:calendar id="fecha" value="#{ventaRC.newVenta.fecha}" pattern="MM/dd/yyyy HH:mm:ss" />
                 <p:messages for="fecha" display="icon"/>
 
-                <h:outputLabel for="providerId" value="Proveedor: "/>
-                <p:inputText id="providerId" value="#{compraRC.newProviderId}" label="Proveedor"/>
-                <p:message for="providerId" display="icon" />
+                <h:outputLabel for="clientId" value="Cliente: "/>
+                <p:inputText id="clientId" value="#{ventaRC.newClientId}" label="Cliente"/>
+                <p:message for="clientId" display="icon" />
 
                 <h:outputLabel for="detalles" value="Detalles: "/>
                 <p:panelGrid id="detalles">
@@ -31,13 +31,13 @@
                         </p:row>
                     </f:facet>
 
-                    <ui:repeat value="#{compraRC.productIds}" var="detalle" varStatus="status">
+                    <ui:repeat value="#{ventaRC.productIds}" var="detalle" varStatus="status">
                         <p:row>
                             <p:column>
-                                <p:inputText value="#{compraRC.productIds[status.index]}" label="producto"/>
+                                <p:inputText value="#{ventaRC.productIds[status.index]}" label="producto"/>
                             </p:column>
                             <p:column>
-                                <p:inputText value="#{compraRC.productNum[status.index]}" label="cantidad"/>
+                                <p:inputText value="#{ventaRC.productNum[status.index]}" label="cantidad"/>
                             </p:column>
                         </p:row>
                     </ui:repeat>
@@ -45,10 +45,10 @@
                     <f:facet name="footer">
                         <p:row>
                             <p:column>
-                                <p:commandButton ajax="false" value="Agregar Producto" icon="ui-icon-disk" action="#{compraRC.addProduct}" />
+                                <p:commandButton ajax="false" value="Agregar Producto" icon="ui-icon-disk" action="#{ventaRC.addProduct}" />
                             </p:column>
                             <p:column>
-                                <p:commandButton ajax="false" value="Remover Producto" icon="ui-icon-disk" action="#{compraRC.removeProduct}" />
+                                <p:commandButton ajax="false" value="Remover Producto" icon="ui-icon-disk" action="#{ventaRC.removeProduct}" />
                             </p:column>
                         </p:row>
                     </f:facet>
@@ -57,7 +57,7 @@
             </h:panelGrid>
             <br/>
 
-            <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{compraRC.registerCompra}" />
+            <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{ventaRC.registerVenta}" />
         </p:panel>
     </h:form>
 </ui:composition>

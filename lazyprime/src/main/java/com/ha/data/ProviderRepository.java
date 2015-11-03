@@ -16,21 +16,33 @@
  */
 package com.ha.data;
 
+import com.ha.model.Client;
 import com.ha.model.Provider;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import org.primefaces.model.SortOrder;
+import java.util.Map;
 
-@ApplicationScoped
+
+@Stateless
 public class ProviderRepository {
 
     @Inject
     private EntityManager em;
+
+    private List<Provider> providers;
 
     public Provider findById(Long id) {
         return em.find(Provider.class, id);
@@ -68,4 +80,42 @@ public class ProviderRepository {
         criteria.select(providerRoot).where(em.getCriteriaBuilder().equal(providerRoot.get("name"),name));
         return em.createQuery(criteria).getSingleResult();
     }
+    public List<Provider> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
+        Query q;
+        String consulta = "";
+        if( searchAttribute.equals("") ){
+            consulta = "SELECT pr.* FROM provider pr ";
+        }
+        else {
+            consulta = "";
+            String clave = "\'%" + searchKey + "%\' ";
+
+            if (searchAttribute.equals("id"))
+                consulta = "SELECT pr.* FROM provider pr WHERE cast(pr.id as TEXT) LIKE " + clave;
+
+            if (searchAttribute.equals("nombre"))
+                consulta = "SELECT pr.* FROM provider pr WHERE pr.name LIKE " + clave;
+
+            if (searchAttribute.equals("all")) {
+                consulta =
+                        "SELECT pr.* FROM provider pr WHERE pr.name LIKE " + clave + " UNION " +
+                        "SELECT pr.* FROM provider pr WHERE cast(pr.id as TEXT) LIKE " + clave;
+            }
+
+        }
+
+        consulta += " ORDER BY " + orderAttribute + " " + order;
+        q = this.em.createNativeQuery(consulta,Provider.class);
+
+        q.setMaxResults(5);
+
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
+    }
+    public void register(Provider p){
+
+        this.em.persist( p );
+    }
+
 }

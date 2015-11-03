@@ -95,12 +95,6 @@
       </dependency>
 
       <dependency>
-         <groupId>javax.servlet</groupId>
-         <artifactId>javax.servlet-api</artifactId>
-         <version>3.1.0</version>
-      </dependency>
-
-      <dependency>
          <groupId>com.google.code.gson</groupId>
          <artifactId>gson</artifactId>
          <version>2.3</version>
@@ -127,7 +121,11 @@
          <scope>provided</scope>
       </dependency>
 
-
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>javax.servlet-api</artifactId>
+         <version>3.1.0</version>
+      </dependency>
 
       <!-- First declare the APIs we depend on and need for compilation. 
          All of them are provided by JBoss AS 7 -->
@@ -221,6 +219,7 @@
          <artifactId>jsf-api</artifactId>
          <version>2.2.4</version>
       </dependency>
+
 
 
    </dependencies>

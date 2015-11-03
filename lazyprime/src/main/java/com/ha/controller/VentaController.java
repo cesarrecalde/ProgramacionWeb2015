@@ -1,26 +1,25 @@
 package com.ha.controller;
 
-import com.ha.data.ProductRepository;
-import com.ha.model.Product;
+import com.ha.data.VentaRepository;
+import com.ha.model.Venta;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by cesar on 22/10/15.
+ * Created by cesar on 01/11/15.
  */
 @ViewScoped
-@ManagedBean(name="productController")
-public class ProductController implements Serializable {
+@ManagedBean(name = "ventaController")
+public class VentaController {
 
     @Inject
-    private ProductRepository repository;
+    private VentaRepository repository;
 
-    private List<Product> list;
+    private List<Venta> list;
 
     private String searchKey;
 
@@ -31,6 +30,7 @@ public class ProductController implements Serializable {
     private String orderAttribute;
 
     private Integer page;
+
 
     @PostConstruct
     public void init(){
@@ -62,51 +62,42 @@ public class ProductController implements Serializable {
         return this.list.size() < 5;
     }
 
-    public List<Product> getList() {
-        return list;
+    public Integer getPage() {
+        return page;
     }
-
-    public void setList(List<Product> list) {
-        this.list = list;
+    public void setPage(Integer page) {
+        this.page = page;
     }
-
-    public String getSearchKey() {
-        return searchKey;
-    }
-
-    public void setSearchKey(String searchKey) {
-        this.searchKey = searchKey;
-    }
-
-    public String getSearchAttribute() {
-        return searchAttribute;
-    }
-
-    public void setSearchAttribute(String searchAttribute) {
-        this.searchAttribute = searchAttribute;
-    }
-
     public String getOrder() {
         return order;
     }
-
     public void setOrder(String order) {
         this.order = order;
     }
-
+    public String getSearchAttribute() {
+        return searchAttribute;
+    }
+    public void setSearchAttribute(String searchAttribute) {
+        this.searchAttribute = searchAttribute;
+    }
+    public String getSearchKey() {
+        return searchKey;
+    }
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
+    }
+    public List<Venta> getList() {
+        return list;
+    }
+    public void setList(List<Venta> ventaList) {
+        this.list = ventaList;
+    }
     public String getOrderAttribute() {
         return orderAttribute;
     }
-
     public void setOrderAttribute(String orderAttribute) {
         this.orderAttribute = orderAttribute;
     }
 
-    public Integer getPage() {
-        return page;
-    }
 
-    public void setPage(Integer page) {
-        this.page = page;
-    }
 }

@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form>
+        <p:panel id="proyectLabel" header="Agregar Proveedor">
+            <p:messages id="messages" />
+            <h:panelGrid columns="3">
+
+                <h:outputLabel for="nombre" value="Nombre:"/>
+                <p:inputText id="nombre" value="#{proveedorRC.newProvider.name}" label="Nombre" required="true"/>
+                <p:message for="nombre" display="icon" />
+
+                <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{proveedorRC.registerProvider}" />
+
+            </h:panelGrid>
+        </p:panel>
+    </h:form>
+</ui:composition>
+
+

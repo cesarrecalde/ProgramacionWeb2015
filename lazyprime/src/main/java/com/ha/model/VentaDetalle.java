@@ -27,6 +27,7 @@ public class VentaDetalle {
     @ManyToOne
     private Product product;
 
+    private String nameProduct;
 
     public VentaDetalle() {
     }
@@ -34,6 +35,7 @@ public class VentaDetalle {
     public VentaDetalle(Venta venta, Product product) {
         this.venta = venta;
         this.product = product;
+        this.nameProduct = product.getNameProduct();
     }
 
     public long getId() {
@@ -63,5 +65,13 @@ public class VentaDetalle {
 
     public void setVenta(Venta venta) {
         this.venta = venta;
+    }
+
+    public String getNameProduct() {
+        return nameProduct;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
     }
 }

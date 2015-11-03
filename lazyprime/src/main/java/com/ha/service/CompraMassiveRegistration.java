@@ -69,7 +69,6 @@ public class CompraMassiveRegistration {
                 System.out.println(l);
                 try {
                     Compra c = parseCompra(l);
-
                     registerCompra(c);
 
                 } catch (IncorrectFieldException e) {
@@ -169,6 +168,7 @@ public class CompraMassiveRegistration {
 
             try {
                 product = productRepository.findById(productId);
+                product.getId();
             }catch( Exception e){
                 throw new ProductNotFoundException("Producto con id: " + productId + "no encontrado");
             }
@@ -191,32 +191,20 @@ public class CompraMassiveRegistration {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerCompra(Compra compra) throws ConstraintViolationException,Exception{
 
+        validateCompra( compra );
+        em.persist( compra );
+
         for( CompraDetalle detalle : compra.getCompraDetalles() ){
-           try {
-               detalle.setCompra( compra );
-               validateCompraDetalle(detalle);
-               em.persist( detalle );
 
-               Product product = detalle.getProduct();
-               product.setCantidad( product.getCantidad() + detalle.getCantidad() );
-               em.merge( product );
+            Product product = detalle.getProduct();
+            product.setCantidad( product.getCantidad() + detalle.getCantidad() );
+            em.merge( product );
 
-           }catch ( ConstraintViolationException e ){
-                throw e;
-           }catch (Exception e){
-               throw new Exception(e);
-           }
+            detalle.setCompra( compra );
+            detalle.setNameProduct( product.getNameProduct() );
+            validateCompraDetalle(detalle);
+            em.persist( detalle );
 
-        }
-
-        try {
-            validateCompra( compra );
-            em.persist( compra );
-
-        }catch ( ConstraintViolationException e){
-            throw e;
-        }catch (Exception e){
-            throw new Exception(e);
         }
 
 

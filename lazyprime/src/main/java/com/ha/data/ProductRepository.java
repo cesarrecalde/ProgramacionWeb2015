@@ -16,21 +16,19 @@
  */
 package com.ha.data;
 
+import com.ha.model.Client;
 import com.ha.model.Product;
-import com.ha.service.ProductMassiveRegistration;
-import com.ha.util.CSVFileReadingException;
-import org.primefaces.component.fileupload.FileUpload;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.io.*;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -71,21 +69,57 @@ public class ProductRepository {
          return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
     }
 
-    public List<Product> findAllOrderedByName() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Product> criteria = cb.createQuery(Product.class);
-        Root<Product> productRoot = criteria.from(Product.class);
-        criteria.select(productRoot).orderBy(cb.asc(productRoot.get("nameProduct")));
-        return em.createQuery(criteria).getResultList();
-    }
-
     public List<Product> findLowStockProducts(){
         return em.createNativeQuery("SELECT * FROM product p WHERE p.cantidad<=10",Product.class).getResultList();
+    }
+
+    public List<Product> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
+        Query q;
+        String consulta = "";
+        if( searchAttribute.equals("") ){
+            consulta = "SELECT pr.* FROM product pr ";
+        }
+        else {
+            consulta = "";
+            String clave = "\'%" + searchKey + "%\' ";
+
+            if (searchAttribute.equals("id"))
+                consulta = "SELECT pr.* FROM product pr WHERE cast(pr.id as TEXT) LIKE " + clave;
+
+            if (searchAttribute.equals("nombre"))
+                consulta = "SELECT pr.* FROM product pr WHERE pr.nameproduct LIKE " + clave;
+
+            if( searchAttribute.equals("cantidad") )
+                consulta = "SELECT pr.* FROM product pr WHERE cast(pr.cantidad as TEXT) LIKE " + clave;
+
+            if( searchAttribute.equals("precio") )
+                consulta = "SELECT pr.* FROM product pr WHERE cast(pr.preciounitario as TEXT) LIKE " + clave;
+
+            if (searchAttribute.equals("all")) {
+                consulta =
+                        "SELECT pr.* FROM product pr WHERE cast(pr.id as TEXT) LIKE " + clave + " UNION " +
+                        "SELECT pr.* FROM product pr WHERE pr.nameproduct LIKE " + clave + " UNION " +
+                        "SELECT pr.* FROM product pr WHERE cast(pr.cantidad as TEXT) LIKE " + clave + " UNION " +
+                        "SELECT pr.* FROM product pr WHERE cast(pr.preciounitario as TEXT) LIKE " + clave;
+            }
+
+
+        }
+
+        consulta += " ORDER BY " + orderAttribute + " " + order;
+        q = this.em.createNativeQuery(consulta,Product.class);
+
+        q.setMaxResults(5);
+
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
     }
 
     public void register(Product p){
         this.em.persist( p );
     }
 
-
+    @TransactionAttribute( TransactionAttributeType.REQUIRED )
+    public void merge(Product p){ this.em.merge( p );}
 }

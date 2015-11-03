@@ -9,18 +9,18 @@
             <h:panelGrid columns="3">
 
                 <h:outputLabel for="nombre" value="Nombre:"/>
-                <p:inputText id="nombre" value="#{productController.newProduct.nameProduct}" label="Nombre" required="true"/>
+                <p:inputText id="nombre" value="#{productRC.newProduct.nameProduct}" label="Nombre" required="true"/>
                 <p:message for="nombre" display="icon" />
 
                 <h:outputLabel for="precio" value="Precio:"/>
-                <p:inputText id="precio" value="#{productController.newProduct.precioUnitario}" label="Precio" required="true"/>
+                <p:inputText id="precio" value="#{productRC.newProduct.precioUnitario}" label="Precio" required="true"/>
                 <p:message for="precio" display="icon" />
 
                 <h:outputLabel for="cantidad" value="Cantidad: "/>
-                <p:inputText id="cantidad" value="#{productController.newProduct.cantidad}" label="Cantidad" required="true"/>
+                <p:inputText id="cantidad" value="#{productRC.newProduct.cantidad}" label="Cantidad" required="true"/>
                 <p:message for="precio" display="icon" />
 
-                <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{productController.registerProduct}" />
+                <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{productRC.registerProduct}" />
 
             </h:panelGrid>
         </p:panel>
