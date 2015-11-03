@@ -42,7 +42,6 @@ public class ProductMassiveRegistration {
     @Inject
     private Event<Product> productEvent;
 
-
     @Inject
     private ProviderRepository providerRepository;
 
@@ -101,7 +100,6 @@ public class ProductMassiveRegistration {
     }
 
     private Product parseProduct(String s) throws Exception,IncorrectFieldException, ProviderNotFoundException{
-
         String[] line =  s.split(",", -1) ;
         Product p = new Product();
 
@@ -116,8 +114,6 @@ public class ProductMassiveRegistration {
         } catch (Exception e) {
             throw new IncorrectFieldException("Campos mal especificados");
         }
-
-
 
         return p;
     }

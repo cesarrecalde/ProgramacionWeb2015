@@ -28,6 +28,7 @@ import javax.validation.Validator;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class VentaMassiveRegistration {
+
     @Inject
     private Logger log;
 
@@ -166,6 +167,7 @@ public class VentaMassiveRegistration {
 
             try {
                 product = productRepository.findById(productId);
+                product.getCantidad();
             }catch( Exception e){
                 throw new ProductNotFoundException("Producto con id: " + productId + "no encontrado");
             }
@@ -189,35 +191,29 @@ public class VentaMassiveRegistration {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerVenta(Venta venta) throws ConstraintViolationException,InsuficientStockException,Exception{
 
+        validateVenta(venta);
+        em.persist(venta);
+
         for( VentaDetalle detalle : venta.getVentaDetalles() ){
-            try {
+
+            Product product = detalle.getProduct();
+
+            if( product.getCantidad() >= detalle.getCantidad() ){
+                product.setCantidad( product.getCantidad() - detalle.getCantidad() );
+                em.merge( product );
+
+                detalle.setVenta( venta );
+                detalle.setNameProduct( product.getNameProduct() );
                 validateVentaDetalle(detalle);
                 em.persist( detalle );
-
-                Product product = detalle.getProduct();
-                if( product.getCantidad() - detalle.getCantidad() >= 0 ){
-                    product.setCantidad( product.getCantidad() - detalle.getCantidad() );
-                    em.merge( product );
-                }else{
-                    throw new InsuficientStockException("Stock del producto id: " + product.getId() + " no es suficiente");
-                }
-
-
-            }catch ( ConstraintViolationException e ){
-                throw e;
-            }catch (Exception e){
-                throw new Exception(e);
+            }else{
+                throw new InsuficientStockException("Stock del producto id: " + product.getId() + " no es suficiente");
             }
 
         }
-        try {
-            validateVenta(venta);
-            em.persist(venta);
-        }catch ( ConstraintViolationException e){
-            throw e;
-        }catch (Exception e){
-            throw new Exception(e);
-        }
+
+
+
 
     }
 }

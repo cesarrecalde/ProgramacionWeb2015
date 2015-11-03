@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form>
+        <p:panel id="proyectLabel" header="Registrar Venta">
+
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+            <h:panelGrid columns="3">
+
+                <h:outputLabel for="fecha" value="Fecha:"/>
+                <p:calendar id="fecha" value="#{ventaRC.newVenta.fecha}" pattern="MM/dd/yyyy HH:mm:ss" />
+                <p:messages for="fecha" display="icon"/>
+
+                <h:outputLabel for="clientId" value="Cliente: "/>
+                <p:inputText id="clientId" value="#{ventaRC.newClientId}" label="Cliente"/>
+                <p:message for="clientId" display="icon" />
+
+                <h:outputLabel for="detalles" value="Detalles: "/>
+                <p:panelGrid id="detalles">
+                    <f:facet name="header">
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="Producto"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="Cantidad"/>
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+
+                    <ui:repeat value="#{ventaRC.productIds}" var="detalle" varStatus="status">
+                        <p:row>
+                            <p:column>
+                                <p:inputText value="#{ventaRC.productIds[status.index]}" label="producto"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value="#{ventaRC.productNum[status.index]}" label="cantidad"/>
+                            </p:column>
+                        </p:row>
+                    </ui:repeat>
+
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column>
+                                <p:commandButton ajax="false" value="Agregar Producto" icon="ui-icon-disk" action="#{ventaRC.addProduct}" />
+                            </p:column>
+                            <p:column>
+                                <p:commandButton ajax="false" value="Remover Producto" icon="ui-icon-disk" action="#{ventaRC.removeProduct}" />
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+                <p:messages for="detalles" display="icon"/>
+            </h:panelGrid>
+            <br/>
+
+            <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{ventaRC.registerVenta}" />
+        </p:panel>
+    </h:form>
+</ui:composition>

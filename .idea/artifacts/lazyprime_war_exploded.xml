@@ -10,9 +10,7 @@
           <element id="library" level="project" name="Maven: javax.faces:jsf-api:2.1" />
           <element id="library" level="project" name="Maven: javax.faces:jsf-impl:1.2_15" />
           <element id="library" level="project" name="Maven: javax.faces:javax.faces-api:2.2" />
-          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.3" />
           <element id="library" level="project" name="Maven: org.primefaces:primefaces:5.3" />
-          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
           <element id="library" level="project" name="Maven: org.primefaces.extensions:all-themes:1.0.8" />
           <element id="library" level="project" name="Maven: org.primefaces.themes:afterdark:1.0.8" />
           <element id="library" level="project" name="Maven: org.primefaces.themes:afternoon:1.0.8" />
@@ -50,6 +48,10 @@
           <element id="library" level="project" name="Maven: org.primefaces.themes:ui-lightness:1.0.8" />
           <element id="library" level="project" name="Maven: org.primefaces.themes:vader:1.0.8" />
           <element id="library" level="project" name="Maven: org.primefaces.themes:home:1.0.8" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
+          <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.3.1" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.3" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
           <element id="library" level="project" name="Maven: com.sun.faces:jsf-api:2.2.4" />
         </element>
       </element>

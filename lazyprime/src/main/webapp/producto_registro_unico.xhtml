@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form>
+        <p:panel id="proyectLabel" header="Agregar Producto">
+            <p:messages id="messages" />
+            <h:panelGrid columns="3">
+
+                <h:outputLabel for="nombre" value="Nombre:"/>
+                <p:inputText id="nombre" value="#{productRC.newProduct.nameProduct}" label="Nombre" required="true"/>
+                <p:message for="nombre" display="icon" />
+
+                <h:outputLabel for="precio" value="Precio:"/>
+                <p:inputText id="precio" value="#{productRC.newProduct.precioUnitario}" label="Precio" required="true"/>
+                <p:message for="precio" display="icon" />
+
+                <h:outputLabel for="cantidad" value="Cantidad: "/>
+                <p:inputText id="cantidad" value="#{productRC.newProduct.cantidad}" label="Cantidad" required="true"/>
+                <p:message for="precio" display="icon" />
+
+                <p:commandButton ajax="false" value="Guardar" icon="ui-icon-disk" action="#{productRC.registerProduct}" />
+
+            </h:panelGrid>
+        </p:panel>
+    </h:form>
+</ui:composition>

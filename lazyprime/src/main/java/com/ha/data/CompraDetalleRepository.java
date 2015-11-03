@@ -16,21 +16,34 @@
  */
 package com.ha.data;
 
+import com.ha.model.Compra;
 import com.ha.model.CompraDetalle;
 
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+import javax.validation.Validator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@ApplicationScoped
+@Stateless
 public class CompraDetalleRepository {
 
     @Inject
     private EntityManager em;
+
+    @Inject
+    private Validator validator;
 
     public CompraDetalle findById(Long id) {
         return em.find(CompraDetalle.class, id);
@@ -58,5 +71,20 @@ public class CompraDetalleRepository {
         Root<CompraDetalle> compraDetalleRoot = criteria.from(CompraDetalle.class);
         criteria.select(compraDetalleRoot).where(cb.isNull(compraDetalleRoot.get("compra"))).orderBy(cb.asc(compraDetalleRoot.get("id")));
         return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+    }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void register(CompraDetalle c) throws ValidationException{
+        validateCompraDetalle( c );
+        this.em.persist(c);
+    }
+
+    private void validateCompraDetalle(CompraDetalle detalle) throws ConstraintViolationException, ValidationException {
+        // Create a bean validator and check for issues.
+        Set<ConstraintViolation<CompraDetalle>> violations = validator.validate(detalle);
+
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
+        }
     }
 }

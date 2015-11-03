@@ -1,8 +1,7 @@
 package com.ha.controller;
 
-
-import com.ha.data.ClientRepository;
-import com.ha.model.Client;
+import com.ha.data.VentaRepository;
+import com.ha.model.Venta;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -11,18 +10,16 @@ import javax.inject.Inject;
 import java.util.List;
 
 /**
- * Created by isaacveron on 25/10/15.
+ * Created by cesar on 01/11/15.
  */
-
-
 @ViewScoped
-@ManagedBean(name="clienteController")
-public class ClienteController {
+@ManagedBean(name = "ventaController")
+public class VentaController {
 
     @Inject
-    private ClientRepository repository;
+    private VentaRepository repository;
 
-    private List<Client> list;
+    private List<Venta> list;
 
     private String searchKey;
 
@@ -33,6 +30,7 @@ public class ClienteController {
     private String orderAttribute;
 
     private Integer page;
+
 
     @PostConstruct
     public void init(){
@@ -67,48 +65,39 @@ public class ClienteController {
     public Integer getPage() {
         return page;
     }
-
     public void setPage(Integer page) {
         this.page = page;
     }
-
+    public String getOrder() {
+        return order;
+    }
+    public void setOrder(String order) {
+        this.order = order;
+    }
+    public String getSearchAttribute() {
+        return searchAttribute;
+    }
+    public void setSearchAttribute(String searchAttribute) {
+        this.searchAttribute = searchAttribute;
+    }
+    public String getSearchKey() {
+        return searchKey;
+    }
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
+    }
+    public List<Venta> getList() {
+        return list;
+    }
+    public void setList(List<Venta> ventaList) {
+        this.list = ventaList;
+    }
     public String getOrderAttribute() {
         return orderAttribute;
     }
-
     public void setOrderAttribute(String orderAttribute) {
         this.orderAttribute = orderAttribute;
     }
 
-    public String getOrder() {
-        return order;
-    }
 
-    public void setOrder(String order) {
-        this.order = order;
-    }
-
-    public String getSearchAttribute() {
-        return searchAttribute;
-    }
-
-    public void setSearchAttribute(String searchAttribute) {
-        this.searchAttribute = searchAttribute;
-    }
-
-    public String getSearchKey() {
-        return searchKey;
-    }
-
-    public void setSearchKey(String searchKey) {
-        this.searchKey = searchKey;
-    }
-
-    public List<Client> getList() {
-        return list;
-    }
-
-    public void setList(List<Client> list) {
-        this.list = list;
-    }
 }

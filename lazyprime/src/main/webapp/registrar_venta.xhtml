@@ -5,20 +5,20 @@
                 template="template.xhtml">
 
     <ui:define name="title">
-        <h:outputText value="Registro de proveedor"/>
+        <h:outputText value="Registro de Ventas"/>
     </ui:define>
 
     <ui:define name="content">
+
         <p:accordionPanel>
-            <p:tab title="Registrar un proveedor">
-                <ui:include src="proveedor_registro_unico.xhtml"/>
+            <p:tab title="Registrar una venta">
+                <ui:include src="venta_registro_unico.xhtml"/>
             </p:tab>
             <p:tab title="Registrar desde archivo CSV">
-                <ui:include src="proveedor_registro_masivo.xhtml"/>
+                <ui:include src="venta_registro_masivo.xhtml"/>
             </p:tab>
-
         </p:accordionPanel>
-
     </ui:define>
 
 </ui:composition>
+

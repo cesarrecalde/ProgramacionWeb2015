@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="Listado de Ventas"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form_lista">
+            <p:panelGrid columns="4">
+                <p:outputLabel for="atributoB" value="Atributo de busqueda:" />
+                <p:selectOneMenu id="atributoB" value="#{ventaController.searchAttribute}" style="width:125px">
+                    <f:selectItem itemLabel="---" itemValue="" />
+                    <f:selectItem itemLabel="id" itemValue="id" />
+                    <f:selectItem itemLabel="fecha" itemValue="fecha" />
+                    <f:selectItem itemLabel="Nombre de cliente" itemValue="cliente_nombre" />
+                    <f:selectItem itemLabel="Id de cliente" itemValue="cliente_id" />
+                    <f:selectItem itemLabel="producto" itemValue="producto" />
+                    <f:selectItem itemLabel="all" itemValue="all" />
+                </p:selectOneMenu>
+                <p:outputLabel for="clave" value="Clave:" />
+                <p:inputText id="clave" value="#{ventaController.searchKey}" label="clave de busqueda"/>
+
+                <p:outputLabel for="atributoO" value="Ordenar por:" />
+                <p:selectOneMenu id="atributoO" value="#{ventaController.orderAttribute}" style="width:125px">
+                    <f:selectItem itemLabel="id" itemValue="id" />
+                    <f:selectItem itemLabel="fecha" itemValue="fecha" />
+                    <f:selectItem itemLabel="Id de cliente" itemValue="client_id" />
+                    <f:selectItem itemLabel="Nombre de Cliente" itemValue="name" />
+                </p:selectOneMenu>
+                <p:outputLabel for="orden" value="Orden: " />
+                <p:selectOneMenu id="orden" value="#{ventaController.order}" style="width:125px">
+                    <f:selectItem itemLabel="ASC" itemValue="ASC" />
+                    <f:selectItem itemLabel="DESC" itemValue="DESC" />
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <p:commandButton update="lista_panel" value="Buscar" action="#{ventaController.find}"/>
+
+            <p:panel id="lista_panel">
+                <p:dataTable id="tabla" var="venta" value="#{ventaController.list}">
+
+                    <p:column style="width:16px">
+                        <p:rowToggler />
+                    </p:column>
+                    <p:column headerText="Id"> <h:outputText value="#{venta.id}"/> </p:column>
+                    <p:column headerText="Fecha"> <h:outputText value="#{venta.fecha}"/> </p:column>
+                    <p:column headerText="Cliente"> <h:outputText value=" Id = #{venta.client.id} / #{venta.client.name}"/> </p:column>
+
+                    <p:rowExpansion>
+                        <p:dataTable var="detalle" value="#{venta.ventaDetalles}">
+                            <p:column headerText="Producto">
+                                <h:outputText value="#{detalle.nameProduct}"/>
+                            </p:column>
+                            <p:column headerText="Cantidad">
+                                <h:outputText value="#{detalle.cantidad}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:rowExpansion>
+                </p:dataTable>
+
+                <p:panelGrid id="paginacion" columns="3">
+
+                    <p:commandButton disabled="#{ventaController.page == 0}" value="Anterior" action="#{ventaController.previusPage}" update="lista_panel"/>
+                    <h:outputText value="  #{ventaController.page + 1}  "/>
+                    <p:commandButton disabled="#{ventaController.isLast()}" value="Siguiente" action="#{ventaController.nextPage}" update="lista_panel"/>
+
+                </p:panelGrid>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
+

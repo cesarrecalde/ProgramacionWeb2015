@@ -33,8 +33,6 @@ public class StockService {
     @Schedule(minute = "*/3",hour = "*", persistent = false)
     public void something(){
 
-        System.out.println("************************************");
-
         List<Product> products = productRepository.findLowStockProducts();
         for( Product p : products){
 

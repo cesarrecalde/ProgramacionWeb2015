@@ -17,11 +17,13 @@
 package com.ha.data;
 
 import com.ha.model.Client;
+import com.ha.model.Compra;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -58,6 +60,40 @@ public class ClientRepository {
         Root<Client> client = criteria.from(Client.class);
         criteria.select(client).orderBy(cb.asc(client.get("name")));
         return em.createQuery(criteria).setFirstResult(position).setMaxResults(5).getResultList();
+    }
+
+    public List<Client> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
+        Query q;
+        String consulta = "";
+        if( searchAttribute.equals("") ){
+            consulta = "SELECT cl.* FROM client cl ";
+        }
+        else {
+            consulta = "";
+            String clave = "\'%" + searchKey + "%\' ";
+
+            if (searchAttribute.equals("id"))
+                consulta = "SELECT cl.* FROM client cl WHERE cast(cl.id as TEXT) LIKE " + clave;
+
+            if (searchAttribute.equals("nombre"))
+                consulta = "SELECT cl.* FROM client cl WHERE cl.name LIKE " + clave;
+
+            if (searchAttribute.equals("all")) {
+                consulta =
+                        "SELECT cl.* FROM client cl WHERE cl.name LIKE " + clave + " UNION " +
+                        "SELECT cl.* FROM client cl WHERE cast(cl.id as TEXT) LIKE " + clave;
+            }
+
+        }
+
+        consulta += " ORDER BY " + orderAttribute + " " + order;
+        q = this.em.createNativeQuery(consulta,Client.class);
+
+        q.setMaxResults(5);
+
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
     }
 
     public void register(Client c){

@@ -1,32 +1,65 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-        template="tenplate.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="template.xhtml">
 
     <ui:define name="title">
         <h:outputText value="Listado de Productos"/>
     </ui:define>
 
     <ui:define name="content">
-        <h:form id="form">
-            <p:dataTable var="producto" value="#{productController.model}" paginator="true" rows="5"
-                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                         selectionMode="single" id="productTable" lazy="true">
-                <p:column headerText="Id" sortBy="#{producto.id}" filterBy="#{producto.id}">
-                    <h:outputText value="#{producto.id}" />
-                </p:column>
-                <p:column headerText="Cantidad" sortBy="#{producto.cantidad}" filterBy="#{producto.cantidad}">
-                    <h:outputText value="#{producto.cantidad}" />
-                </p:column>
-                <p:column headerText="Nombre" sortBy="#{producto.nameProduct}" filterBy="#{producto.nameProduct}">
-                    <h:outputText value="#{producto.nameProduct}" />
-                </p:column>
-                <p:column headerText="Precio Unitario" sortBy="#{producto.precioUnitario}" filterBy="#{producto.precioUnitario}">
-                    <h:outputText value="#{producto.precioUnitario}" />
-                </p:column>
-            </p:dataTable>
+        <h:form id="form_lista">
+            <p:panelGrid columns="4">
 
+                <p:outputLabel for="atributo_B" value="Atributo de busqueda:" />
+                <p:selectOneMenu id="atributo_B" value="#{productController.searchAttribute}" style="width:125px">
+                    <f:selectItem itemLabel="---" itemValue="" />
+                    <f:selectItem itemLabel="id" itemValue="id" />
+                    <f:selectItem itemLabel="Nombre" itemValue="nombre" />
+                    <f:selectItem itemLabel="Precio" itemValue="precio" />
+                    <f:selectItem itemLabel="Cantidad" itemValue="cantidad" />
+                    <f:selectItem itemLabel="all" itemValue="all" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="clave" value="Clave: " />
+                <p:inputText id="clave" value="#{productController.searchKey}" label="clave de busqueda"/>
+
+                <p:outputLabel for="atributo_O" value="Ordenar por:" />
+                <p:selectOneMenu id="atributo_O" value="#{productController.orderAttribute}" style="width:125px">
+                    <f:selectItem itemLabel="id" itemValue="id" />
+                    <f:selectItem itemLabel="Nombre" itemValue="nameProduct" />
+                    <f:selectItem itemLabel="Precio" itemValue="precioUnitario" />
+                    <f:selectItem itemLabel="Cantidad" itemValue="cantidad" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="orden" value="Orden: " />
+                <p:selectOneMenu id="orden" value="#{productController.order}" style="width:125px">
+                    <f:selectItem itemLabel="ASC" itemValue="ASC" />
+                    <f:selectItem itemLabel="DESC" itemValue="DESC" />
+                </p:selectOneMenu>
+
+            </p:panelGrid>
+
+            <p:commandButton update="lista_panel" value="Buscar" action="#{productController.find}"/>
+
+            <p:panel id="lista_panel">
+
+                <p:dataTable id="tabla" var="producto" value="#{productController.list}">
+                    <p:column headerText="Id"> <h:outputText value="#{producto.id}"/> </p:column>
+                    <p:column headerText="Fecha"> <h:outputText value="#{producto.nameProduct}"/> </p:column>
+                    <p:column headerText="Precio Unitario"> <h:outputText value="#{producto.precioUnitario}"/> </p:column>
+                    <p:column headerText="Cantidad en Stock"> <h:outputText value="#{producto.cantidad}"/> </p:column>
+                </p:dataTable>
+
+                <p:panelGrid id="paginacion" columns="3">
+
+                    <p:commandButton disabled="#{productController.page == 0}" value="Anterior" action="#{productController.previusPage}" update="lista_panel"/>
+                    <h:outputText value="  #{productController.page + 1}  "/>
+                    <p:commandButton disabled="#{productController.isLast()}" value="Siguiente" action="#{productController.nextPage}" update="lista_panel"/>
+                </p:panelGrid>
+            </p:panel>
 
         </h:form>
     </ui:define>

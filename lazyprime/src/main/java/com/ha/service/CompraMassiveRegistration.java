@@ -130,20 +130,17 @@ public class CompraMassiveRegistration {
         }
 
         try {
-            Provider provider = providerRepository.findById( Long.parseLong(line[1]) );
+
+            Provider provider = providerRepository.findById( Long.parseLong( line[1]) );
             compra.setProvider( provider );
         } catch (Exception e) {
             throw new ProviderNotFoundException("Proveedor no encontrado");
         }
 
         ArrayList<CompraDetalle> detallesList = null;
-        try {
-            detallesList = parseDetalles( line[2] );
-        } catch (ProductNotFoundException e) {
-            throw e;
-        } catch (IncorrectFieldException e) {
-            throw e;
-        }
+
+        detallesList = parseDetalles( line[2] );
+
 
         compra.setCompraDetalles( detallesList );
 
@@ -171,10 +168,10 @@ public class CompraMassiveRegistration {
 
             try {
                 product = productRepository.findById(productId);
+                product.getId();
             }catch( Exception e){
                 throw new ProductNotFoundException("Producto con id: " + productId + "no encontrado");
             }
-
 
             CompraDetalle det = new CompraDetalle();
             det.setCantidad( cantidad );
@@ -185,7 +182,7 @@ public class CompraMassiveRegistration {
         }
 
         if( lista.isEmpty() ){
-            throw  new IncorrectFieldException("La lista de detalles no piede estar vacia");
+            throw  new IncorrectFieldException("La lista de detalles no puede estar vacia");
         }
         else {
             return lista;
@@ -194,30 +191,22 @@ public class CompraMassiveRegistration {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void registerCompra(Compra compra) throws ConstraintViolationException,Exception{
 
+        validateCompra( compra );
+        em.persist( compra );
+
         for( CompraDetalle detalle : compra.getCompraDetalles() ){
-           try {
-               validateCompraDetalle( detalle );
-               em.persist( detalle );
 
-               Product product = detalle.getProduct();
-               product.setCantidad( product.getCantidad() + detalle.getCantidad() );
-               em.merge( product );
+            Product product = detalle.getProduct();
+            product.setCantidad( product.getCantidad() + detalle.getCantidad() );
+            em.merge( product );
 
-           }catch ( ConstraintViolationException e ){
-                throw e;
-           }catch (Exception e){
-               throw new Exception(e);
-           }
+            detalle.setCompra( compra );
+            detalle.setNameProduct( product.getNameProduct() );
+            validateCompraDetalle(detalle);
+            em.persist( detalle );
 
         }
-        try {
-            validateCompra( compra );
-            em.persist(compra);
-        }catch ( ConstraintViolationException e){
-            throw e;
-        }catch (Exception e){
-            throw new Exception(e);
-        }
+
 
     }
 

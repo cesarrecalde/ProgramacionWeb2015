@@ -1,28 +1,24 @@
 package com.ha.controller;
-import com.ha.data.ProviderRepository;
-import com.ha.model.Provider;
 
-import java.util.List;
+import com.ha.data.ComprasRepository;
+import com.ha.model.Compra;
 
-import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.inject.Inject;
 import javax.faces.bean.ViewScoped;
-
+import javax.inject.Inject;
+import java.util.List;
 
 /**
- * Created by isaacveron on 25/10/15.
+ * Created by cesar on 29/10/15.
  */
-
 @ViewScoped
-@ManagedBean(name="proveedorController")
-public class ProveedorController implements Serializable{
-
+@ManagedBean( name = "compraController")
+public class CompraController {
     @Inject
-    private ProviderRepository repository;
+    private ComprasRepository repository;
 
-    private List<Provider> list;
+    private List<Compra> list;
 
     private String searchKey;
 
@@ -33,6 +29,7 @@ public class ProveedorController implements Serializable{
     private String orderAttribute;
 
     private Integer page;
+
 
     @PostConstruct
     public void init(){
@@ -47,28 +44,48 @@ public class ProveedorController implements Serializable{
 
     public void find(){
         this.page = 0;
+        System.out.println("****************");
+        System.out.println("Pagina: " +this.page);
+        System.out.println("OrdenA: "+this.orderAttribute);
+        System.out.println("Orden: "+this.order);
+        System.out.println("BusquedaA: "+this.searchAttribute);
+        System.out.println("Clave: "+this.searchKey);
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
+        System.out.println("Resultados: "+this.list.size());
+
     }
 
     public void nextPage(){
         this.page ++;
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
+        System.out.println("****************");
+        System.out.println("Pagina: " +this.page);
+        System.out.println("OrdenA: "+this.orderAttribute);
+        System.out.println("Orden: "+this.order);
+        System.out.println("BusquedaA: "+this.searchAttribute);
+        System.out.println("Clave: "+this.searchKey);
     }
 
     public void previusPage(){
         this.page --;
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
+        System.out.println("****************");
+        System.out.println("Pagina: " +this.page);
+        System.out.println("OrdenA: "+this.orderAttribute);
+        System.out.println("Orden: "+this.order);
+        System.out.println("BusquedaA: "+this.searchAttribute);
+        System.out.println("Clave: "+this.searchKey);
     }
 
     public boolean isLast(){
         return this.list.size() < 5;
     }
 
-    public List<Provider> getList() {
+    public List<Compra> getList() {
         return list;
     }
 
-    public void setList(List<Provider> list) {
+    public void setList(List<Compra> list) {
         this.list = list;
     }
 
