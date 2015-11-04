@@ -27,6 +27,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.List;
 
 @Stateless
@@ -63,7 +66,43 @@ public class ClientRepository {
     }
 
     public List<Client> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
-        Query q;
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+
+        q.setMaxResults(5);
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
+    }
+
+    public String getCSVFile(String searchAttribute,String searchKey,String orderAttribute,String order) throws Exception{
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+        String filePath = "/home/cesar/Escritorio/ClientCSV.csv";
+        q.setMaxResults(5);
+
+        List<Client> list = q.getResultList();
+
+        File file = new File(filePath);
+        PrintWriter pw = new PrintWriter( file );
+
+        int i = 0;
+        while( !list.isEmpty() ){
+
+            for( Client item : list){
+                pw.println( item.toCSV() );
+            }
+
+            i++;
+            q.setFirstResult(i*5);
+            list = q.getResultList();
+        }
+
+        pw.close();
+        return filePath;
+    }
+
+    public Query createQuery(String searchAttribute,String searchKey,String orderAttribute,String order){
+
         String consulta = "";
         if( searchAttribute.equals("") ){
             consulta = "SELECT cl.* FROM client cl ";
@@ -81,19 +120,13 @@ public class ClientRepository {
             if (searchAttribute.equals("all")) {
                 consulta =
                         "SELECT cl.* FROM client cl WHERE cl.name LIKE " + clave + " UNION " +
-                        "SELECT cl.* FROM client cl WHERE cast(cl.id as TEXT) LIKE " + clave;
+                                "SELECT cl.* FROM client cl WHERE cast(cl.id as TEXT) LIKE " + clave;
             }
 
         }
 
         consulta += " ORDER BY " + orderAttribute + " " + order;
-        q = this.em.createNativeQuery(consulta,Client.class);
-
-        q.setMaxResults(5);
-
-        q.setFirstResult(page*5);
-
-        return q.getResultList();
+        return this.em.createNativeQuery(consulta,Client.class);
     }
 
     public void register(Client c){

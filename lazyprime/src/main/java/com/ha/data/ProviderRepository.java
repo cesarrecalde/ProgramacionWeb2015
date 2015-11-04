@@ -17,6 +17,7 @@
 package com.ha.data;
 
 import com.ha.model.Client;
+import com.ha.model.Compra;
 import com.ha.model.Provider;
 
 import com.google.gson.Gson;
@@ -31,6 +32,8 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.List;
 import org.primefaces.model.SortOrder;
 import java.util.Map;
@@ -80,8 +83,44 @@ public class ProviderRepository {
         criteria.select(providerRoot).where(em.getCriteriaBuilder().equal(providerRoot.get("name"),name));
         return em.createQuery(criteria).getSingleResult();
     }
+
     public List<Provider> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
-        Query q;
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+
+        q.setMaxResults(5);
+
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
+    }
+    public String getCSVFile(String searchAttribute,String searchKey,String orderAttribute,String order) throws Exception{
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+        String filePath = "/home/cesar/Escritorio/ProveedorCSV.csv";
+        q.setMaxResults(5);
+
+        List<Provider> list = q.getResultList();
+
+        File file = new File(filePath);
+        PrintWriter pw = new PrintWriter( file );
+
+        int i = 0;
+        while( !list.isEmpty() ){
+
+            for( Provider item : list){
+                pw.println( item.toCSV() );
+            }
+
+            i++;
+            q.setFirstResult(i*5);
+            list = q.getResultList();
+        }
+
+        pw.close();
+        return filePath;
+    }
+    public Query createQuery(String searchAttribute,String searchKey,String orderAttribute,String order){
         String consulta = "";
         if( searchAttribute.equals("") ){
             consulta = "SELECT pr.* FROM provider pr ";
@@ -99,20 +138,15 @@ public class ProviderRepository {
             if (searchAttribute.equals("all")) {
                 consulta =
                         "SELECT pr.* FROM provider pr WHERE pr.name LIKE " + clave + " UNION " +
-                        "SELECT pr.* FROM provider pr WHERE cast(pr.id as TEXT) LIKE " + clave;
+                                "SELECT pr.* FROM provider pr WHERE cast(pr.id as TEXT) LIKE " + clave;
             }
 
         }
 
         consulta += " ORDER BY " + orderAttribute + " " + order;
-        q = this.em.createNativeQuery(consulta,Provider.class);
-
-        q.setMaxResults(5);
-
-        q.setFirstResult(page*5);
-
-        return q.getResultList();
+        return this.em.createNativeQuery(consulta,Provider.class);
     }
+
     public void register(Provider p){
 
         this.em.persist( p );

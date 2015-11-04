@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="Listado de Clientes"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form_lista">
+            <p:panelGrid columns="4">
+
+                <p:outputLabel for="atributo_B" value="Atributo de busqueda:" />
+                <p:selectOneMenu id="atributo_B" value="#{solicitudController.searchAttribute}" style="width:125px">
+                    <f:selectItem itemLabel="---" itemValue="" />
+                    <f:selectItem itemLabel="id" itemValue="id" />
+                    <f:selectItem itemLabel="Nombre de Producto" itemValue="producto_nombre" />
+                    <f:selectItem itemLabel="Id de Producto" itemValue="producto_id" />
+                    <f:selectItem itemLabel="Id de Producto" itemValue="all" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="clave" value="Clave: " />
+                <p:inputText id="clave" value="#{solicitudController.searchKey}" label="clave de busqueda"/>
+
+                <p:outputLabel for="atributo_O" value="Ordenar por:" />
+                <p:selectOneMenu id="atributo_O" value="#{solicitudController.orderAttribute}" style="width:125px">
+                    <f:selectItem itemLabel="id" itemValue="id" />
+                    <f:selectItem itemLabel="Nombre de Producto" itemValue="nameProduct" />
+                    <f:selectItem itemLabel="Id de producto" itemValue="product_id" />
+                </p:selectOneMenu>
+
+                <p:outputLabel for="orden" value="Orden: " />
+                <p:selectOneMenu id="orden" value="#{solicitudController.order}" style="width:125px">
+                    <f:selectItem itemLabel="ASC" itemValue="ASC" />
+                    <f:selectItem itemLabel="DESC" itemValue="DESC" />
+                </p:selectOneMenu>
+
+            </p:panelGrid>
+
+            <p:commandButton update="lista_panel" value="Buscar" action="#{solicitudController.find}"/>
+
+            <p:panel id="lista_panel">
+
+                <p:dataTable id="tabla" var="solicitud" value="#{solicitudController.list}">
+                    <p:column headerText="Id"> <h:outputText value="#{solicitud.id}"/> </p:column>
+                    <p:column headerText="Nombre"> <h:outputText value="Id = #{solicitud.product.id} / #{solicitud.nameProduct}"/> </p:column>
+                </p:dataTable>
+
+                <p:panelGrid id="paginacion" columns="3">
+
+                    <p:commandButton disabled="#{solicitudController.page == 0}" value="Anterior" action="#{solicitudController.previusPage}" update="lista_panel"/>
+                    <h:outputText value="  #{solicitudController.page + 1}  "/>
+                    <p:commandButton disabled="#{solicitudController.isLast()}" value="Siguiente" action="#{solicitudController.nextPage}" update="lista_panel"/>
+
+                </p:panelGrid>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

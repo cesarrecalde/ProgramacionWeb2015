@@ -32,6 +32,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +84,45 @@ public class ComprasRepository {
     }
 
     public List<Compra> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
-        Query q;
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+
+        q.setMaxResults(5);
+
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
+    }
+
+    public String getCSVFile(String searchAttribute,String searchKey,String orderAttribute,String order) throws Exception{
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+        String filePath = "/home/cesar/Escritorio/ComprasCSV.csv";
+        q.setMaxResults(5);
+
+        List<Compra> list = q.getResultList();
+
+        File file = new File(filePath);
+        PrintWriter pw = new PrintWriter( file );
+
+        int i = 0;
+        while( !list.isEmpty() ){
+
+            for( Compra item : list){
+                pw.println( item.toCSV() );
+            }
+
+            i++;
+            q.setFirstResult(i*5);
+            list = q.getResultList();
+        }
+
+        pw.close();
+        return filePath;
+    }
+
+    public Query createQuery(String searchAttribute,String searchKey,String orderAttribute,String order){
+
         String consulta = "";
         if( searchAttribute.equals("") ){
             consulta = "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id ";
@@ -111,23 +151,17 @@ public class ComprasRepository {
             if (searchAttribute.equals("all")) {
                 consulta =
                         "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id and cast(co.id as TEXT) LIKE " + clave + " UNION " +
-                        "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id and to_char(co.fecha,'DD-MM-YY') LIKE " + clave + " UNION " +
-                        "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id and pr.name LIKE " + clave + " UNION " +
-                        "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id and cast(pr.id as TEXT) LIKE " + clave + " UNION " +
-                        "SELECT co.* FROM compra co,provider pr,compra_det d WHERE pr.id=co.provider_id and d.compra_id=co.id and d.nameproduct LIKE " + clave;
+                                "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id and to_char(co.fecha,'DD-MM-YY') LIKE " + clave + " UNION " +
+                                "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id and pr.name LIKE " + clave + " UNION " +
+                                "SELECT co.* FROM compra co,provider pr WHERE pr.id=co.provider_id and cast(pr.id as TEXT) LIKE " + clave + " UNION " +
+                                "SELECT co.* FROM compra co,provider pr,compra_det d WHERE pr.id=co.provider_id and d.compra_id=co.id and d.nameproduct LIKE " + clave;
 
             }
 
         }
 
         consulta += " ORDER BY " + orderAttribute + " " + order;
-        q = this.em.createNativeQuery(consulta,Compra.class);
-
-        q.setMaxResults(5);
-
-        q.setFirstResult(page*5);
-
-        return q.getResultList();
+        return this.em.createNativeQuery(consulta,Compra.class);
     }
 
     @TransactionAttribute( TransactionAttributeType.REQUIRES_NEW )

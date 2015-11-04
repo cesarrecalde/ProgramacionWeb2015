@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.List;
-
+import com.ha.data.CompraDetalleRepository;
 /**
  * Created by fede on 11/10/15.
  */
@@ -37,34 +37,39 @@ public class Compra {
         this.provider = provider;
     }
 
-    public long getId() {
-        return id;
-    }
+    public String toCSV(){
+        String result = "";
+        result += this.fecha + ",";
+        result += this.provider.getId();
 
-    public void setId(long id) {
-        this.id = id;
-    }
+        for( CompraDetalle detalle : this.compraDetalles){
+            result += "," + detalle.getProduct().getId() + "-" + detalle.getCantidad();
+        }
 
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+        return  result;
     }
 
     public List<CompraDetalle> getCompraDetalles() {
         return compraDetalles;
     }
-
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public Date getFecha() {
+        return fecha;
+    }
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
     public void setCompraDetalles(List<CompraDetalle> compraDetalles) {
         this.compraDetalles = compraDetalles;
     }
-
     public Provider getProvider() {
         return provider;
     }
-
     public void setProvider(Provider provider) {
         this.provider = provider;
     }

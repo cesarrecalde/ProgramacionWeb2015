@@ -69,4 +69,10 @@ public class Client implements Serializable {
     public Client(String name) {
         this.name = name;
     }
+
+    public String toCSV(){
+        String result ="";
+        result += this.name;
+        return result;
+    }
 }

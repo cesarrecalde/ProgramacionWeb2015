@@ -20,8 +20,11 @@ public class SolicitudCompra implements Serializable{
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
+    public String nameProduct;
+
     public SolicitudCompra( Product product) {
         this.product = product;
+        this.nameProduct = product.getNameProduct();
     }
 
     public SolicitudCompra(){
@@ -44,5 +47,11 @@ public class SolicitudCompra implements Serializable{
         this.product = product;
     }
 
+    public String getNameProduct() {
+        return nameProduct;
+    }
 
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
+    }
 }

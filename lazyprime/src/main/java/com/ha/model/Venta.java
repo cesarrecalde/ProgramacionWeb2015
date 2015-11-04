@@ -74,5 +74,15 @@ public class Venta {
         this.client = client;
     }
 
+    public String toCSV(){
+        String result = "";
+        result += this.fecha + ",";
+        result += this.client.getId();
 
+        for( VentaDetalle detalle : this.ventaDetalles){
+            result += "," + detalle.getProduct().getId() + "-" + detalle.getCantidad();
+        }
+
+        return  result;
+    }
 }

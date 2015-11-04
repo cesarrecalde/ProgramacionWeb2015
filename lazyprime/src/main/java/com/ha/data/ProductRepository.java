@@ -29,6 +29,8 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -74,7 +76,43 @@ public class ProductRepository {
     }
 
     public List<Product> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
-        Query q;
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+
+        q.setMaxResults(5);
+
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
+    }
+    public String getCSVFile(String searchAttribute,String searchKey,String orderAttribute,String order) throws Exception{
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+        String filePath = "/home/cesar/Escritorio/ProductoCSV.csv";
+        q.setMaxResults(5);
+
+        List<Product> list = q.getResultList();
+
+        File file = new File(filePath);
+        PrintWriter pw = new PrintWriter( file );
+
+        int i = 0;
+        while( !list.isEmpty() ){
+
+            for( Product item : list){
+                pw.println( item.toCSV() );
+            }
+
+            i++;
+            q.setFirstResult(i*5);
+            list = q.getResultList();
+        }
+
+        pw.close();
+        return filePath;
+    }
+
+    public Query createQuery(String searchAttribute,String searchKey,String orderAttribute,String order){
         String consulta = "";
         if( searchAttribute.equals("") ){
             consulta = "SELECT pr.* FROM product pr ";
@@ -98,24 +136,17 @@ public class ProductRepository {
             if (searchAttribute.equals("all")) {
                 consulta =
                         "SELECT pr.* FROM product pr WHERE cast(pr.id as TEXT) LIKE " + clave + " UNION " +
-                        "SELECT pr.* FROM product pr WHERE pr.nameproduct LIKE " + clave + " UNION " +
-                        "SELECT pr.* FROM product pr WHERE cast(pr.cantidad as TEXT) LIKE " + clave + " UNION " +
-                        "SELECT pr.* FROM product pr WHERE cast(pr.preciounitario as TEXT) LIKE " + clave;
+                                "SELECT pr.* FROM product pr WHERE pr.nameproduct LIKE " + clave + " UNION " +
+                                "SELECT pr.* FROM product pr WHERE cast(pr.cantidad as TEXT) LIKE " + clave + " UNION " +
+                                "SELECT pr.* FROM product pr WHERE cast(pr.preciounitario as TEXT) LIKE " + clave;
             }
 
 
         }
 
         consulta += " ORDER BY " + orderAttribute + " " + order;
-        q = this.em.createNativeQuery(consulta,Product.class);
-
-        q.setMaxResults(5);
-
-        q.setFirstResult(page*5);
-
-        return q.getResultList();
+        return this.em.createNativeQuery(consulta,Product.class);
     }
-
     public void register(Product p){
         this.em.persist( p );
     }

@@ -1,35 +1,25 @@
 package com.ha.controller;
-import com.ha.data.ProviderRepository;
-import com.ha.model.Provider;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.List;
+import com.ha.data.SolicitudCompraRepository;
+import com.ha.model.SolicitudCompra;
 
-import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.faces.bean.ViewScoped;
-
+import javax.inject.Inject;
+import java.util.List;
 
 /**
- * Created by isaacveron on 25/10/15.
+ * Created by cesar on 03/11/15.
  */
-
 @ViewScoped
-@ManagedBean(name="proveedorController")
-public class ProveedorController implements Serializable{
+@ManagedBean( name = "solicitudController")
+public class SolicitudCompraController {
 
     @Inject
-    private ProviderRepository repository;
+    private SolicitudCompraRepository repository;
 
-    private List<Provider> list;
+    private List<SolicitudCompra> list;
 
     private String searchKey;
 
@@ -40,8 +30,6 @@ public class ProveedorController implements Serializable{
     private String orderAttribute;
 
     private Integer page;
-
-    private StreamedContent file;
 
     @PostConstruct
     public void init(){
@@ -69,36 +57,15 @@ public class ProveedorController implements Serializable{
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
     }
 
-    public void downloadCSV() throws Exception{
-
-        String filePath = this.repository.getCSVFile(searchAttribute,searchKey,orderAttribute,order);
-
-        File file = new File(filePath);
-
-        InputStream input = new FileInputStream(file);
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-
-        this.file = new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName());
-
-    }
-
-    public StreamedContent getFile() {
-        return file;
-    }
-
-    public void setFile(StreamedContent file) {
-        this.file = file;
-    }
     public boolean isLast(){
         return this.list.size() < 5;
     }
 
-    public List<Provider> getList() {
+    public List<SolicitudCompra> getList() {
         return list;
     }
 
-    public void setList(List<Provider> list) {
+    public void setList(List<SolicitudCompra> list) {
         this.list = list;
     }
 

@@ -2,11 +2,18 @@ package com.ha.controller;
 
 import com.ha.data.VentaRepository;
 import com.ha.model.Venta;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -31,6 +38,7 @@ public class VentaController {
 
     private Integer page;
 
+    private StreamedContent file;
 
     @PostConstruct
     public void init(){
@@ -58,6 +66,28 @@ public class VentaController {
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
     }
 
+
+    public void downloadCSV() throws Exception{
+
+        String filePath = this.repository.getCSVFile(searchAttribute,searchKey,orderAttribute,order);
+
+        File file = new File(filePath);
+
+        InputStream input = new FileInputStream(file);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
+        this.file = new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName());
+
+    }
+
+    public StreamedContent getFile() {
+        return file;
+    }
+
+    public void setFile(StreamedContent file) {
+        this.file = file;
+    }
     public boolean isLast(){
         return this.list.size() < 5;
     }

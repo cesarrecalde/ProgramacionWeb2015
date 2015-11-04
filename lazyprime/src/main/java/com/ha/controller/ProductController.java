@@ -2,11 +2,18 @@ package com.ha.controller;
 
 import com.ha.data.ProductRepository;
 import com.ha.model.Product;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,6 +39,8 @@ public class ProductController implements Serializable {
 
     private Integer page;
 
+    private StreamedContent file;
+
     @PostConstruct
     public void init(){
         this.page = 0;
@@ -56,6 +65,29 @@ public class ProductController implements Serializable {
     public void previusPage(){
         this.page --;
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
+    }
+
+
+    public void downloadCSV() throws Exception{
+
+        String filePath = this.repository.getCSVFile(searchAttribute,searchKey,orderAttribute,order);
+
+        File file = new File(filePath);
+
+        InputStream input = new FileInputStream(file);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
+        this.file = new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName());
+
+    }
+
+    public StreamedContent getFile() {
+        return file;
+    }
+
+    public void setFile(StreamedContent file) {
+        this.file = file;
     }
 
     public boolean isLast(){
