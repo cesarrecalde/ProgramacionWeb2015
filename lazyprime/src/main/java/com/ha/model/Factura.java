@@ -39,6 +39,15 @@ public class Factura implements Serializable{
         // Constructor por Defecto
     }
 
+    public String toCSV(){
+        String res = "";
+        res += this.id + ",";
+        res += this.monto + ",";
+        res += this.fecha;
+
+        return res;
+    }
+
     public Long getId() {
         return id;
     }
