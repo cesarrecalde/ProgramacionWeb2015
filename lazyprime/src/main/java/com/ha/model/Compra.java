@@ -37,6 +37,18 @@ public class Compra {
         this.provider = provider;
     }
 
+    public String toCSV(){
+        String result = "";
+        result += this.fecha + ",";
+        result += this.provider.getId();
+
+        for( CompraDetalle detalle : this.compraDetalles){
+            result += "," + detalle.getProduct().getId() + "-" + detalle.getCantidad();
+        }
+
+        return  result;
+    }
+
     public List<CompraDetalle> getCompraDetalles() {
         return compraDetalles;
     }

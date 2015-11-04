@@ -61,6 +61,5 @@ INSERT INTO compra_det(cantidad, compra_id, product_id,nameproduct) VALUES (10,2
 INSERT INTO compra_det(cantidad, compra_id, product_id,nameproduct) VALUES (12,2,3,'Producto 3');
 INSERT INTO compra_det(cantidad, compra_id, product_id,nameproduct) VALUES (20,2,6,'Producto 6');
 
-INSERT INTO compra_det(cantidad, compra_id, product_id,nameproduct) VALUES (10,3,9,'Producto 9');
 INSERT INTO compra_det(cantidad, compra_id, product_id,nameproduct) VALUES (12,3,8,'Producto 8');
 INSERT INTO compra_det(cantidad, compra_id, product_id,nameproduct) VALUES (20,3,7,'Producto 7');

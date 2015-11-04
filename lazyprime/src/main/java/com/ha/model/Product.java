@@ -96,4 +96,12 @@ public class Product implements Serializable {
 
     public Product() {
     }
+
+    public String toCSV(){
+        String result ="";
+        result += this.nameProduct + ",";
+        result += this.precioUnitario + ",";
+        result += this.cantidad;
+        return result;
+    }
 }

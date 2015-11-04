@@ -1,11 +1,8 @@
 package com.ha.controller;
 
 import com.ha.data.ClientRepository;
-import com.ha.data.ProductRepository;
 import com.ha.model.Client;
-import com.ha.model.Product;
 import com.ha.service.ClientMassiveRegistration;
-import com.ha.service.ProductMassiveRegistration;
 import com.ha.util.CSVFileReadingException;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -50,7 +47,6 @@ public class ClientRegistrationController {
     public void massiveRegistration( FileUploadEvent event ) throws CSVFileReadingException,IOException {
         UploadedFile file = event.getFile();
         String fileName = file.getFileName();
-        System.out.println("***" + fileName + "***");
         String filePath = "/home/cesar/Escritorio/" + fileName;
 
         File archivoGuardado = new File( filePath );

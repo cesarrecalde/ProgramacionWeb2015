@@ -66,4 +66,10 @@ public class Provider implements Serializable {
 
      public Provider() {
     }
+
+    public String toCSV(){
+        String result ="";
+        result += this.name;
+        return result;
+    }
 }

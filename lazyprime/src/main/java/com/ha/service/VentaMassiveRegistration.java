@@ -118,7 +118,7 @@ public class VentaMassiveRegistration {
         Venta venta = new Venta();
 
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             venta.setFecha( formatter.parse(line[0]) );
 
         } catch (Exception e) {

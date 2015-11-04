@@ -2,11 +2,18 @@ package com.ha.controller;
 
 import com.ha.data.ComprasRepository;
 import com.ha.model.Compra;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -30,6 +37,7 @@ public class CompraController {
 
     private Integer page;
 
+    private StreamedContent file;
 
     @PostConstruct
     public void init(){
@@ -44,37 +52,41 @@ public class CompraController {
 
     public void find(){
         this.page = 0;
-        System.out.println("****************");
-        System.out.println("Pagina: " +this.page);
-        System.out.println("OrdenA: "+this.orderAttribute);
-        System.out.println("Orden: "+this.order);
-        System.out.println("BusquedaA: "+this.searchAttribute);
-        System.out.println("Clave: "+this.searchKey);
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
-        System.out.println("Resultados: "+this.list.size());
 
     }
 
     public void nextPage(){
         this.page ++;
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
-        System.out.println("****************");
-        System.out.println("Pagina: " +this.page);
-        System.out.println("OrdenA: "+this.orderAttribute);
-        System.out.println("Orden: "+this.order);
-        System.out.println("BusquedaA: "+this.searchAttribute);
-        System.out.println("Clave: "+this.searchKey);
     }
 
     public void previusPage(){
         this.page --;
         this.list = this.repository.findBy(page,searchAttribute,searchKey,orderAttribute,order);
-        System.out.println("****************");
-        System.out.println("Pagina: " +this.page);
-        System.out.println("OrdenA: "+this.orderAttribute);
-        System.out.println("Orden: "+this.order);
-        System.out.println("BusquedaA: "+this.searchAttribute);
-        System.out.println("Clave: "+this.searchKey);
+
+    }
+
+    public void downloadCSV() throws Exception{
+
+        String filePath = this.repository.getCSVFile(searchAttribute,searchKey,orderAttribute,order);
+
+        File file = new File(filePath);
+
+        InputStream input = new FileInputStream(file);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
+        this.file = new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName());
+
+    }
+
+    public StreamedContent getFile() {
+        return file;
+    }
+
+    public void setFile(StreamedContent file) {
+        this.file = file;
     }
 
     public boolean isLast(){
@@ -128,4 +140,6 @@ public class CompraController {
     public void setPage(Integer page) {
         this.page = page;
     }
+
+
 }

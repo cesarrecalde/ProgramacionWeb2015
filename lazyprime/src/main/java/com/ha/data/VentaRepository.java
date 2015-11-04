@@ -29,6 +29,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +76,45 @@ public class VentaRepository {
     }
 
     public List<Venta> findBy(int page,String searchAttribute,String searchKey,String orderAttribute,String order){
-        Query q;
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+
+        q.setMaxResults(5);
+
+        q.setFirstResult(page*5);
+
+        return q.getResultList();
+    }
+
+    public String getCSVFile(String searchAttribute,String searchKey,String orderAttribute,String order) throws Exception{
+
+        Query q = createQuery(searchAttribute,searchKey,orderAttribute,order);
+        String filePath = "/home/cesar/Escritorio/VentasCSV.csv";
+        q.setMaxResults(5);
+
+        List<Venta> list = q.getResultList();
+
+        File file = new File(filePath);
+        PrintWriter pw = new PrintWriter( file );
+
+        int i = 0;
+        while( !list.isEmpty() ){
+
+            for( Venta item : list){
+                pw.println( item.toCSV() );
+            }
+
+            i++;
+            q.setFirstResult(i*5);
+            list = q.getResultList();
+        }
+
+        pw.close();
+        return filePath;
+    }
+
+    public Query createQuery(String searchAttribute,String searchKey,String orderAttribute,String order){
+
         String consulta = "";
         if( searchAttribute.equals("") ){
             consulta = "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id ";
@@ -103,10 +143,10 @@ public class VentaRepository {
             if (searchAttribute.equals("all")) {
                 consulta =
                         "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id and cast(v.id as TEXT) LIKE " + clave + " UNION " +
-                        "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id and to_char(v.fecha,'DD-MM-YY') LIKE " + clave + " UNION " +
-                        "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id and cl.name LIKE " + clave + " UNION " +
-                        "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id and cast(cl.id as TEXT) LIKE " + clave + " UNION " +
-                        "SELECT v.* FROM venta v,client cl,ventas_det d WHERE cl.id=v.client_id and d.venta_id=v.id and d.nameproduct LIKE " + clave;
+                                "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id and to_char(v.fecha,'DD-MM-YY') LIKE " + clave + " UNION " +
+                                "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id and cl.name LIKE " + clave + " UNION " +
+                                "SELECT v.* FROM venta v,client cl WHERE cl.id=v.client_id and cast(cl.id as TEXT) LIKE " + clave + " UNION " +
+                                "SELECT v.* FROM venta v,client cl,ventas_det d WHERE cl.id=v.client_id and d.venta_id=v.id and d.nameproduct LIKE " + clave;
 
             }
 
@@ -114,13 +154,7 @@ public class VentaRepository {
 
 
         consulta += " ORDER BY " + orderAttribute + " " + order;
-        q = this.em.createNativeQuery(consulta,Venta.class);
-
-        q.setMaxResults(5);
-
-        q.setFirstResult(page*5);
-
-        return q.getResultList();
+        return this.em.createNativeQuery(consulta,Venta.class);
     }
 
     public List<Venta> findAllOrderedByDate(int position) {

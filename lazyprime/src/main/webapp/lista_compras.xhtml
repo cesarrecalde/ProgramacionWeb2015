@@ -71,6 +71,10 @@
                 </p:panelGrid>
             </p:panel>
 
+            <p:commandButton actionListener="#{compraController.downloadCSV}" value="Descargar" ajax="false">
+                <p:fileDownload value="#{compraController.file}"/>
+            </p:commandButton>
+
         </h:form>
     </ui:define>
 
